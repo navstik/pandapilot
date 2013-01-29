@@ -1,0 +1,29 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+choice
+	prompt "Select target board"
+	default ARCH_BOARD_CUSTOM
+	---help---
+		Select the board hosting the architure.  You must first select the
+		exact MCU part number, then the boards supporting that part will
+		be available for selection.  Use ARCH_BOARD_CUSTOM to create a new
+		board configuration.
+
+config ARCH_BOARD_NAVSTIK
+	bool "Navstik board"
+	depends on ARCH_CHIP_STM32F405RG
+	---help---
+		Navstik navigation and control board
+endchoice
+
+config ARCH_BOARD
+	string
+	default "navstik"			if ARCH_BOARD_NAVSTIK
+	default ""					if ARCH_BOARD_CUSTOM
+
+if ARCH_BOARD_NAVSTIK
+source "configs/navstik/Kconfig"
+endif
