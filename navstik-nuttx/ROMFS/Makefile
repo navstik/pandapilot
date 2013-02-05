@@ -39,17 +39,6 @@ ROMFS_FSSPEC	:= $(SRCROOT)/scripts/rcS~init.d/rcS \
 # to ROMFS. 
 ROMFS_FSSPEC += $(EXTERNAL_SCRIPTS)
 
-#
-# Add the PX4IO firmware to the spec if someone has dropped it into the
-# source directory, or otherwise specified its location.
-#
-# Normally this is only something you'd do when working on PX4IO; most
-# users will upgrade with firmware off the microSD card.
-#
-PX4IO_FIRMWARE	?= $(SRCROOT)/px4io.bin
-ifneq ($(wildcard $(PX4IO_FIRMWARE)),)
-ROMFS_FSSPEC	+=  $(PX4IO_FIRMWARE)~px4io.bin
-endif
 
 ################################################################################
 # No user-serviceable parts below

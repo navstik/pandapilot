@@ -147,7 +147,7 @@ __EXPORT int matherr(struct exception *e)
 __EXPORT int nsh_archinitialize(void)
 {
 	int result;
-
+	
 	/* Enable power to peripherals suchg as Telemetry, GPS, Sensors i.e. enable PC10, PA4, PC15 */
 
 	/* configure the high-resolution time/callout interface */

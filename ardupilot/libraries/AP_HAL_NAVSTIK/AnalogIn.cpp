@@ -26,7 +26,7 @@ using namespace Navstik;
 
 int NavstikAnalogIn::_adc_fd;
 uint32_t NavstikAnalogIn::_last_run;
-NavstikAnalogSource* NavstikAnalogIn::_channels[Navstik_ANALOG_MAX_CHANNELS] = {};
+NavstikAnalogSource* NavstikAnalogIn::_channels[NAVSTIK_ANALOG_MAX_CHANNELS] = {};
 
 NavstikAnalogSource::NavstikAnalogSource(int16_t pin, float initial_value, float scale) :
 	_pin(pin),

@@ -229,17 +229,20 @@ enum log_messages {
 #define CONFIG_INS_MPU6000 2
 #define CONFIG_INS_STUB    3
 #define CONFIG_INS_PX4     4
+#define CONFIG_INS_NAVSTIK 5
 
 // barometer driver types
 #define AP_BARO_BMP085   1
 #define AP_BARO_MS5611   2
 #define AP_BARO_PX4      3
 #define AP_BARO_HIL      4
+#define AP_BARO_NAVSTIK  5
 
 // compass driver types
 #define AP_COMPASS_HMC5843   1
 #define AP_COMPASS_PX4       2
 #define AP_COMPASS_HIL       3
+#define AP_COMPASS_NAVSTIK   4
 
 // altitude control algorithms
 enum {

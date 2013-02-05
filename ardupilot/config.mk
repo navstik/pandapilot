@@ -12,8 +12,8 @@ PORT = /dev/ttyACM0
 # PX4_ROOT = /home/amit/work/navstik/PX4-firmware
 
 # NAVSTIK app build: uncomment and fill in the path to Navstik Firmware repository:
-NAVSTIK_ROOT = /path/to/navstik-pilot/navstik-nuttx/
+NAVSTIK_ROOT = /home/amit/work/navstik/navstik-pilot/navstik-nuttx/
 
-APPDIR = /path/to/navstik-pilot/navstik-nuttx/apps
+APPDIR = /home/amit/work/navstik/navstik-pilot/navstik-nuttx/apps
 
 #ARDUINO = /path/to/arduino-1.0.3

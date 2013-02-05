@@ -364,7 +364,9 @@ Sensors	*g_sensors;
 }
 
 Sensors::Sensors() :
+#if CONFIG_HRT_PPM
 	_ppm_last_valid(0),
+#endif
 
 	_fd_adc(-1),
 	_last_adc(0),
@@ -1094,8 +1096,10 @@ Sensors::ppm_poll()
 		if (channel_limit > _rc_max_chan_count)
 			channel_limit = _rc_max_chan_count;
 
+#if CONFIG_HRT_PPM
 		/* we are accepting this message */
 		_ppm_last_valid = rc_input.timestamp;
+#endif
 
 		/* Read out values from raw message */
 		for (unsigned int i = 0; i < channel_limit; i++) {

@@ -1,6 +1,6 @@
 #!nsh
 
-# APM startup script for NuttX on PX4
+# APM startup script for NuttX on Navstik
 
 if [ -f /fs/microsd/APM/nostart ]
 then
@@ -38,24 +38,14 @@ then
 	hmc5883 start
 	adc start
 
-	echo Trying PX4IO start
-	if px4io start
+	fmu start mode_pwm
+	if [ $device == /dev/ttyS1 ]
 	then
-		echo Setting up PX4IO board
-		echo Loading FMU_pass mixer
-		mixer load /dev/pwm_output /etc/mixers/FMU_pass.mix
-		echo Setting FMU mode_serial
-		fmu mode_serial
-	else
-		echo Setting up PX4FMU direct mode
-		fmu start mode_pwm
-		if [ $device == /dev/ttyS1 ]
-		then
-			# ttyS1 is used for PWM output when there
-			# is no IO board
-			set device /dev/ttyS2
-		fi
+# ttyS1 is used for PWM output when there
+# is no IO board
+	set device /dev/ttyS2
 	fi
+
 	echo Starting $sketch
 	$sketch -d $device start
 

@@ -81,7 +81,7 @@ int delay_test_main(int argc, char *argv[])
 		command_msg = true;
 	}
 
-	int buzzer = open("/dev/tone_alarm", O_WRONLY);
+//	int buzzer = open("/dev/tone_alarm", O_WRONLY);
 	int leds = open(LED_DEVICE_PATH, 0);
 
 	/* prepare use of amber led */
@@ -132,7 +132,7 @@ int delay_test_main(int argc, char *argv[])
 			}
 
 			led_on(leds, LED_AMBER);
-			ioctl(buzzer, TONE_SET_ALARM, 4);
+			//ioctl(buzzer, TONE_SET_ALARM, 4);
 			/* keep led on for 50 ms to make it barely visible */
 			usleep(50000);
 			led_off(leds, LED_AMBER);
@@ -140,7 +140,7 @@ int delay_test_main(int argc, char *argv[])
 	}
 
 	/* stop alarm */
-	ioctl(buzzer, TONE_SET_ALARM, 0);
+	//ioctl(buzzer, TONE_SET_ALARM, 0);
 
 	/* switch on leds */
 	led_on(leds, LED_BLUE);

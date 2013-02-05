@@ -16,7 +16,7 @@ public:
     void init(int argc, char * const argv[]) const;
 };
 
-extern const HAL_Navstik AP_HAL_Navstik;
+extern const HAL_Navstik AP_HAL_NAVSTIK;
 
 #endif // CONFIG_HAL_BOARD == HAL_BOARD_NAVSTIK
 #endif // __AP_HAL_NAVSTIK_CLASS_H__

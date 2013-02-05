@@ -110,7 +110,7 @@ int test_led(int argc, char *argv[])
 	int i;
 	uint8_t ledon = 1;
 
-	for (i = 0; i < 10; i++) {
+	for (i = 0; i < 20; i++) {
 		if (ledon) {
 			ioctl(fd, LED_ON, LED_BLUE);
 			ioctl(fd, LED_OFF, LED_AMBER);
@@ -121,7 +121,7 @@ int test_led(int argc, char *argv[])
 		}
 
 		ledon = !ledon;
-		usleep(60000);
+		usleep(600000);
 	}
 
 	/* Go back to default */

@@ -71,6 +71,7 @@
 #include <AP_HAL_AVR.h>
 #include <AP_HAL_AVR_SITL.h>
 #include <AP_HAL_PX4.h>
+#include <AP_HAL_NAVSTIK.h>
 #include <AP_HAL_Empty.h>
 
 AP_HAL::BetterStream* cliSerial;
@@ -144,6 +145,8 @@ static AP_ADC_ADS7844 adc;
 static AP_Baro_BMP085 barometer;
 #elif CONFIG_BARO == AP_BARO_PX4
 static AP_Baro_PX4 barometer;
+#elif CONFIG_BARO == AP_BARO_NAVSTIK
+static AP_Baro_Navstik barometer;
 #elif CONFIG_BARO == AP_BARO_HIL
 static AP_Baro_BMP085_HIL barometer;
 #elif CONFIG_BARO == AP_BARO_MS5611
@@ -160,6 +163,8 @@ static AP_Baro_BMP085_HIL barometer;
 
 #if CONFIG_COMPASS == AP_COMPASS_PX4
 static AP_Compass_PX4 compass;
+#elif CONFIG_COMPASS == AP_COMPASS_NAVSTIK
+static AP_Compass_Navstik compass;
 #elif CONFIG_COMPASS == AP_COMPASS_HMC5843
 static AP_Compass_HMC5843 compass;
 #elif CONFIG_COMPASS == AP_COMPASS_HIL
@@ -201,6 +206,8 @@ AP_GPS_HIL      g_gps_driver;
 AP_InertialSensor_MPU6000 ins;
 #elif CONFIG_INS_TYPE == CONFIG_INS_PX4
 AP_InertialSensor_PX4 ins;
+#elif CONFIG_INS_TYPE == CONFIG_INS_NAVSTIK
+AP_InertialSensor_Navstik ins;
 #elif CONFIG_INS_TYPE == CONFIG_INS_STUB
 AP_InertialSensor_Stub ins;
 #elif CONFIG_INS_TYPE == CONFIG_INS_OILPAN

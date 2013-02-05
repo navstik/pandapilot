@@ -257,7 +257,7 @@ void HAL_Navstik::init(int argc, char * const argv[]) const
 	exit(1);
 }
 
-const HAL_Navstik AP_HAL_Navstik;
+const HAL_Navstik AP_HAL_NAVSTIK;
 
 #endif // CONFIG_HAL_BOARD == HAL_BOARD_NAVSTIK
 

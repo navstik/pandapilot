@@ -63,12 +63,12 @@ endif
 CONFIGURED_APPS += systemcmds/reboot
 CONFIGURED_APPS += systemcmds/perf
 CONFIGURED_APPS += systemcmds/top
-CONFIGURED_APPS += systemcmds/boardinfo
+#CONFIGURED_APPS += systemcmds/boardinfo
 CONFIGURED_APPS += systemcmds/mixer
-CONFIGURED_APPS += systemcmds/eeprom
+#CONFIGURED_APPS += systemcmds/eeprom
 CONFIGURED_APPS += systemcmds/param
-CONFIGURED_APPS += systemcmds/bl_update
-CONFIGURED_APPS += systemcmds/preflight_check
+#CONFIGURED_APPS += systemcmds/bl_update
+#CONFIGURED_APPS += systemcmds/preflight_check
 CONFIGURED_APPS += systemcmds/delay_test
 
 # Tutorial code from
@@ -82,10 +82,10 @@ CONFIGURED_APPS += systemcmds/delay_test
 # Shared object broker; required by many parts of the system.
 CONFIGURED_APPS += uORB
 
-CONFIGURED_APPS += mavlink
-CONFIGURED_APPS += mavlink_onboard
-CONFIGURED_APPS += gps
-CONFIGURED_APPS += commander
+#CONFIGURED_APPS += mavlink
+#CONFIGURED_APPS += mavlink_onboard
+#CONFIGURED_APPS += gps
+#CONFIGURED_APPS += commander
 CONFIGURED_APPS += sdlog
 CONFIGURED_APPS += sensors
 #CONFIGURED_APPS += ardrone_interface
@@ -107,8 +107,8 @@ CONFIGURED_APPS	+= drivers/device
 CONFIGURED_APPS += drivers/ms4515
 CONFIGURED_APPS += drivers/hmc5883
 CONFIGURED_APPS += drivers/mpu6000
-CONFIGURED_APPS += drivers/bma180
-CONFIGURED_APPS += drivers/l3gd20
+#CONFIGURED_APPS += drivers/bma180
+#CONFIGURED_APPS += drivers/l3gd20
 #CONFIGURED_APPS	+= drivers/px4io
 CONFIGURED_APPS += drivers/stm32
 CONFIGURED_APPS += drivers/led

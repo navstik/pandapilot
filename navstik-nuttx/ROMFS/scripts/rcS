@@ -92,39 +92,7 @@ else
 	#
 	# Assume that we are PX4FMU in standalone mode
 	#
-	set BOARD PX4FMU
-
-	#
-	# Are we attached to a PX4IOAR (AR.Drone carrier board)?
-	#
-	if boardinfo test name PX4IOAR
-	then
-		set BOARD PX4IOAR
-		if [ -f /etc/init.d/rc.PX4IOAR ]
-		then
-			echo "[init] reading /etc/init.d/rc.PX4IOAR"
-			usleep 500
-			sh /etc/init.d/rc.PX4IOAR
-		fi
-	else
-		echo "[init] PX4IOAR not detected"
-	fi
-
-	#
-	# Are we attached to a PX4IO?
-	#
-	if boardinfo test name PX4IO
-	then
-		set BOARD PX4IO
-		if [ -f /etc/init.d/rc.PX4IO ]
-		then
-			echo "[init] reading /etc/init.d/rc.PX4IO"
-			usleep 500
-			sh /etc/init.d/rc.PX4IO
-		fi
-	else
-		echo "[init] PX4IO not detected"
-	fi
+	set BOARD NAVSTIK
 
 	#
 	# Looks like we are stand-alone
