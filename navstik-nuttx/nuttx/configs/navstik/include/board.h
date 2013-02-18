@@ -312,6 +312,11 @@
 #define NAVSTIK_I2C_OBDEV_MS4515	0x28	// Differential pressure sensor (optional component)
 #define NAVSTIK_I2C_OBDEV_MPU60x0	0x69	// Accelerometer + Gyro
 
+/* Configure interrupt GPIOs of peripherals on I2C bus */
+#define NAVSTIK_I2C_OBDEV_MPU60x0_INT	(GPIO_INPUT|GPIO_PORTC|GPIO_PIN0)
+#define NAVSTIK_I2C_OBDEV_HMC5883_INT	(GPIO_INPUT|GPIO_PORTC|GPIO_PIN14)
+#define NAVSTIK_I2C_OBDEV_MS4515_INT	(GPIO_INPUT|GPIO_PORTC|GPIO_PIN13)
+
 /*
  * SPI
  */

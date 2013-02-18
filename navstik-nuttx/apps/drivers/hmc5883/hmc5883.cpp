@@ -75,7 +75,7 @@
  * HMC5883 internal constants and data structures.
  */
 
-#define HMC5883L_BUS			NAVSTIK_I2C_BUS_ONBOARD
+#define HMC5883L_BUS			NAVSTIK_I2C_BUS_EXPANSION
 #define HMC5883L_ADDRESS		NAVSTIK_I2C_OBDEV_HMC5883
 
 /* Max measurement rate is 160Hz */
@@ -796,7 +796,8 @@ HMC5883::collect()
 
 	if (ret != OK) {
 		perf_count(_comms_errors);
-		debug("data/status read error");
+		debug("data/status read error %d. Data read : %d %d, %d %d, %d %d", 
+				ret, hmc_report.x[0], hmc_report.x[1], hmc_report.y[0], hmc_report.y[1], hmc_report.z[0], hmc_report.z[1]);
 		goto out;
 	}
 
