@@ -1,5 +1,7 @@
 /****************************************************************************
  *
+ *   Copyright (C) 2013 Navstik Development Team. All rights reserved. Based on PX4 port.
+ *
  *   Copyright (C) 2012 PX4 Development Team. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,12 +34,14 @@
  ****************************************************************************/
 
 /**
- * @file mpu6000.cpp
+ * @file mpu60x0.cpp
  *
- * Driver for the Invensense MPU6000 connected via SPI.
+ * Driver for the Invensense MPU60x0 connected via I2C.
  */
 
 #include <nuttx/config.h>
+
+#include <drivers/device/i2c.h>
 
 #include <sys/types.h>
 #include <stdint.h>
@@ -63,9 +67,12 @@
 #include <arch/board/board.h>
 #include <drivers/drv_hrt.h>
 
-#include <drivers/device/spi.h>
+//#include <drivers/device/spi.h>
 #include <drivers/drv_accel.h>
 #include <drivers/drv_gyro.h>
+
+#define MPU60x0_BUS			NAVSTIK_I2C_BUS_ESC
+#define MPU60x0_ADDRESS		NAVSTIK_I2C_OBDEV_MPU60x0
 
 #define DIR_READ			0x80
 #define DIR_WRITE			0x00
@@ -145,13 +152,13 @@
 #define MPU6000_REV_D10			0x5A
 
 
-class MPU6000_gyro;
+class MPU60x0_gyro;
 
-class MPU6000 : public device::SPI
+class MPU60x0 : public device::I2C
 {
 public:
-	MPU6000(int bus, spi_dev_e device);
-	~MPU6000();
+	MPU60x0(int bus);
+	~MPU60x0();
 
 	virtual int		init();
 
@@ -166,13 +173,13 @@ public:
 protected:
 	virtual int		probe();
 
-	friend class MPU6000_gyro;
+	friend class MPU60x0_gyro;
 
 	virtual ssize_t		gyro_read(struct file *filp, char *buffer, size_t buflen);
 	virtual int		gyro_ioctl(struct file *filp, int cmd, unsigned long arg);
 
 private:
-	MPU6000_gyro		*_gyro;
+	MPU60x0_gyro		*_gyro;
 	uint8_t			_product;	/** product code */
 
 	struct hrt_call		_call;
@@ -220,24 +227,24 @@ private:
 	void			measure();
 
 	/**
-	 * Read a register from the MPU6000
+	 * Read a register from the MPU60x0
 	 *
 	 * @param		The register to read.
 	 * @return		The value that was read.
 	 */
-	uint8_t			read_reg(unsigned reg);
-	uint16_t		read_reg16(unsigned reg);
+	uint8_t			read_reg(uint8_t reg);
+//	uint16_t		read_reg16(unsigned reg);
 
 	/**
-	 * Write a register in the MPU6000
+	 * Write a register in the MPU60x0
 	 *
 	 * @param reg		The register to write.
 	 * @param value		The new value to write.
 	 */
-	void			write_reg(unsigned reg, uint8_t value);
+	void			write_reg(uint8_t reg, uint8_t value);
 
 	/**
-	 * Modify a register in the MPU6000
+	 * Modify a register in the MPU60x0
 	 *
 	 * Bits are cleared before bits are set.
 	 *
@@ -245,10 +252,10 @@ private:
 	 * @param clearbits	Bits in the register to clear.
 	 * @param setbits	Bits in the register to set.
 	 */
-	void			modify_reg(unsigned reg, uint8_t clearbits, uint8_t setbits);
+	void			modify_reg(uint8_t reg, uint8_t clearbits, uint8_t setbits);
 
 	/**
-	 * Set the MPU6000 measurement range.
+	 * Set the MPU60x0 measurement range.
 	 *
 	 * @param max_g		The maximum G value the range must support.
 	 * @return		OK if the value can be supported, -ERANGE otherwise.
@@ -256,7 +263,7 @@ private:
 	int			set_range(unsigned max_g);
 
 	/**
-	 * Swap a 16-bit value read from the MPU6000 to native byte order.
+	 * Swap a 16-bit value read from the MPU60x0 to native byte order.
 	 */
 	uint16_t		swap16(uint16_t val) { return (val >> 8) | (val << 8);	}
 
@@ -272,29 +279,29 @@ private:
 /**
  * Helper class implementing the gyro driver node.
  */
-class MPU6000_gyro : public device::CDev
+class MPU60x0_gyro : public device::CDev
 {
 public:
-	MPU6000_gyro(MPU6000 *parent);
-	~MPU6000_gyro();
+	MPU60x0_gyro(MPU60x0 *parent);
+	~MPU60x0_gyro();
 
 	virtual ssize_t		read(struct file *filp, char *buffer, size_t buflen);
 	virtual int		ioctl(struct file *filp, int cmd, unsigned long arg);
 
 protected:
-	friend class MPU6000;
+	friend class MPU60x0;
 
 	void			parent_poll_notify();
 private:
-	MPU6000			*_parent;
+	MPU60x0			*_parent;
 };
 
 /** driver 'main' command */
-extern "C" { __EXPORT int mpu6000_main(int argc, char *argv[]); }
+extern "C" { __EXPORT int mpu60x0_main(int argc, char *argv[]); }
 
-MPU6000::MPU6000(int bus, spi_dev_e device) :
-	SPI("MPU6000", ACCEL_DEVICE_PATH, bus, device, SPIDEV_MODE3, 10000000),
-	_gyro(new MPU6000_gyro(this)),
+MPU60x0::MPU60x0(int bus) :
+	I2C("MPU60x0", ACCEL_DEVICE_PATH, bus, MPU60x0_ADDRESS, 400000),
+	_gyro(new MPU60x0_gyro(this)),
 	_product(0),
 	_call_interval(0),
 	_accel_range_scale(0.0f),
@@ -304,7 +311,7 @@ MPU6000::MPU6000(int bus, spi_dev_e device) :
 	_gyro_range_rad_s(0.0f),
 	_gyro_topic(-1),
 	_reads(0),
-	_sample_perf(perf_alloc(PC_ELAPSED, "mpu6000_read"))
+	_sample_perf(perf_alloc(PC_ELAPSED, "mpu60x0_read"))
 {
 	// disable debug() calls
 	_debug_enabled = false;
@@ -330,7 +337,7 @@ MPU6000::MPU6000(int bus, spi_dev_e device) :
 	memset(&_call, 0, sizeof(_call));
 }
 
-MPU6000::~MPU6000()
+MPU60x0::~MPU60x0()
 {
 	/* make sure we are truly inactive */
 	stop();
@@ -343,16 +350,16 @@ MPU6000::~MPU6000()
 }
 
 int
-MPU6000::init()
+MPU60x0::init()
 {
 	int ret;
 
-	/* do SPI init (and probe) first */
-	ret = SPI::init();
+	/* do I2C init (and probe) first */
+	ret = I2C::init();
 
 	/* if probe/setup failed, bail now */
 	if (ret != OK) {
-		debug("SPI setup failed");
+		debug("I2C setup failed");
 		return ret;
 	}
 
@@ -369,20 +376,18 @@ MPU6000::init()
 	up_udelay(1000);
 
 	// Disable I2C bus (recommended on datasheet)
-	write_reg(MPUREG_USER_CTRL, BIT_I2C_IF_DIS);
-	up_udelay(1000);
+	//write_reg(MPUREG_USER_CTRL, BIT_I2C_IF_DIS);
+	//up_udelay(1000);
 
-	// SAMPLE RATE
-	write_reg(MPUREG_SMPLRT_DIV, 0x04);     // Sample rate = 200Hz    Fsample= 1Khz/(4+1) = 200Hz
-	usleep(1000);
-
-	// FS & DLPF   FS=2000 deg/s, DLPF = 20Hz (low pass filter)
-	// was 90 Hz, but this ruins quality and does not improve the
-	// system response
+	// DLPF = 20Hz (low pass filter), Gyro output rate = 1kHz
 	write_reg(MPUREG_CONFIG, BITS_DLPF_CFG_20HZ);
 	usleep(1000);
 	// Gyro scale 2000 deg/s ()
 	write_reg(MPUREG_GYRO_CONFIG, BITS_FS_2000DPS);
+	usleep(1000);
+
+	// SAMPLE RATE
+	write_reg(MPUREG_SMPLRT_DIV, 0x04); // Sample rate = Gyro output rate / (1 + divider) = 1Khz/(4+1) = 200Hz
 	usleep(1000);
 
 	// correct gyro scale factors
@@ -451,13 +456,14 @@ MPU6000::init()
 
 	if (gyro_ret != OK) {
 		_gyro_topic = -1;
+		debug("Gyro init failed");
 	}
 
 	return ret;
 }
 
 int
-MPU6000::probe()
+MPU60x0::probe()
 {
 
 	/* look for a product ID we recognise */
@@ -486,7 +492,7 @@ MPU6000::probe()
 }
 
 ssize_t
-MPU6000::read(struct file *filp, char *buffer, size_t buflen)
+MPU60x0::read(struct file *filp, char *buffer, size_t buflen)
 {
 	int ret = 0;
 
@@ -506,7 +512,7 @@ MPU6000::read(struct file *filp, char *buffer, size_t buflen)
 }
 
 int
-MPU6000::self_test()
+MPU60x0::self_test()
 {
 	if (_reads == 0) {
 		measure();
@@ -517,7 +523,7 @@ MPU6000::self_test()
 }
 
 ssize_t
-MPU6000::gyro_read(struct file *filp, char *buffer, size_t buflen)
+MPU60x0::gyro_read(struct file *filp, char *buffer, size_t buflen)
 {
 	int ret = 0;
 
@@ -537,7 +543,7 @@ MPU6000::gyro_read(struct file *filp, char *buffer, size_t buflen)
 }
 
 int
-MPU6000::ioctl(struct file *filp, int cmd, unsigned long arg)
+MPU60x0::ioctl(struct file *filp, int cmd, unsigned long arg)
 {
 	switch (cmd) {
 
@@ -602,6 +608,10 @@ MPU6000::ioctl(struct file *filp, int cmd, unsigned long arg)
 		/* XXX not implemented */
 		return -EINVAL;
 
+	case SENSORIOCRESET:
+		write_reg(MPUREG_PWR_MGMT_1, BIT_H_RESET);
+		up_udelay(10000);
+		return OK;
 
 	case ACCELIOCSSAMPLERATE:
 	case ACCELIOCGSAMPLERATE:
@@ -644,12 +654,12 @@ MPU6000::ioctl(struct file *filp, int cmd, unsigned long arg)
 
 	default:
 		/* give it to the superclass */
-		return SPI::ioctl(filp, cmd, arg);
+		return I2C::ioctl(filp, cmd, arg);
 	}
 }
 
 int
-MPU6000::gyro_ioctl(struct file *filp, int cmd, unsigned long arg)
+MPU60x0::gyro_ioctl(struct file *filp, int cmd, unsigned long arg)
 {
 	switch (cmd) {
 
@@ -694,24 +704,22 @@ MPU6000::gyro_ioctl(struct file *filp, int cmd, unsigned long arg)
 
 	default:
 		/* give it to the superclass */
-		return SPI::ioctl(filp, cmd, arg);
+		return I2C::ioctl(filp, cmd, arg);
 	}
 }
 
 uint8_t
-MPU6000::read_reg(unsigned reg)
+MPU60x0::read_reg(uint8_t reg)
 {
-	uint8_t cmd[2];
+	uint8_t val;
 
-	cmd[0] = reg | DIR_READ;
-
-	transfer(cmd, cmd, sizeof(cmd));
-
-	return cmd[1];
+	transfer(&reg, 1, &val, 1);
+	return val;
 }
 
+#if 0
 uint16_t
-MPU6000::read_reg16(unsigned reg)
+MPU60x0::read_reg16(unsigned reg)
 {
 	uint8_t cmd[3];
 
@@ -721,20 +729,18 @@ MPU6000::read_reg16(unsigned reg)
 
 	return (uint16_t)(cmd[1] << 8) | cmd[2];
 }
+#endif
 
 void
-MPU6000::write_reg(unsigned reg, uint8_t value)
+MPU60x0::write_reg(uint8_t reg, uint8_t value)
 {
-	uint8_t	cmd[2];
+	uint8_t cmd[] = { reg, value };
 
-	cmd[0] = reg | DIR_WRITE;
-	cmd[1] = value;
-
-	transfer(cmd, nullptr, sizeof(cmd));
+	transfer(&cmd[0], 2, nullptr, 0);
 }
 
 void
-MPU6000::modify_reg(unsigned reg, uint8_t clearbits, uint8_t setbits)
+MPU60x0::modify_reg(uint8_t reg, uint8_t clearbits, uint8_t setbits)
 {
 	uint8_t	val;
 
@@ -745,7 +751,7 @@ MPU6000::modify_reg(unsigned reg, uint8_t clearbits, uint8_t setbits)
 }
 
 int
-MPU6000::set_range(unsigned max_g)
+MPU60x0::set_range(unsigned max_g)
 {
 #if 0
 	uint8_t rangebits;
@@ -787,41 +793,39 @@ MPU6000::set_range(unsigned max_g)
 }
 
 void
-MPU6000::start()
+MPU60x0::start()
 {
 	/* make sure we are stopped first */
 	stop();
 
 	/* start polling at the specified rate */
-	hrt_call_every(&_call, 1000, _call_interval, (hrt_callout)&MPU6000::measure_trampoline, this);
+	hrt_call_every(&_call, 1000, _call_interval, (hrt_callout)&MPU60x0::measure_trampoline, this);
 }
 
 void
-MPU6000::stop()
+MPU60x0::stop()
 {
 	hrt_cancel(&_call);
 }
 
 void
-MPU6000::measure_trampoline(void *arg)
+MPU60x0::measure_trampoline(void *arg)
 {
-	MPU6000 *dev = (MPU6000 *)arg;
+	MPU60x0 *dev = (MPU60x0 *)arg;
 
 	/* make another measurement */
 	dev->measure();
 }
 
 void
-MPU6000::measure()
+MPU60x0::measure()
 {
+	uint8_t		cmd;
+	int	ret = -EIO;
+
 #pragma pack(push, 1)
-	/**
-	 * Report conversation within the MPU6000, including command byte and
-	 * interrupt status.
-	 */
+	/* Report values from MPU60x0 */
 	struct MPUReport {
-		uint8_t		cmd;
-		uint8_t		status;
 		uint8_t		accel_x[2];
 		uint8_t		accel_y[2];
 		uint8_t		accel_z[2];
@@ -846,11 +850,18 @@ MPU6000::measure()
 	perf_begin(_sample_perf);
 
 	/*
-	 * Fetch the full set of measurements from the MPU6000 in one pass.
+	 * Fetch the full set of measurements from the MPU60x0 in one pass.
 	 */
-	mpu_report.cmd = DIR_READ | MPUREG_INT_STATUS;
-	if (OK != transfer((uint8_t *)&mpu_report, ((uint8_t *)&mpu_report), sizeof(mpu_report)))
+	cmd = MPUREG_ACCEL_XOUT_H;
+	ret = transfer(&cmd, 1, (uint8_t *)&mpu_report, sizeof(mpu_report));
+	if (ret != OK) {
+		debug("data/status read error %d. Data read : ");
+		uint8_t *ptr = (uint8_t *) &mpu_report; 
+		for (uint8_t i = 0; i < sizeof(mpu_report); i++) {
+			debug("%d ", *ptr);
+		}
 		return;
+	}
 
 	/* count measurement */
 	_reads++;
@@ -951,35 +962,35 @@ MPU6000::measure()
 }
 
 void
-MPU6000::print_info()
+MPU60x0::print_info()
 {
 	printf("reads:          %u\n", _reads);
 }
 
-MPU6000_gyro::MPU6000_gyro(MPU6000 *parent) :
-	CDev("MPU6000_gyro", GYRO_DEVICE_PATH),
+MPU60x0_gyro::MPU60x0_gyro(MPU60x0 *parent) :
+	CDev("MPU60x0_gyro", GYRO_DEVICE_PATH),
 	_parent(parent)
 {
 }
 
-MPU6000_gyro::~MPU6000_gyro()
+MPU60x0_gyro::~MPU60x0_gyro()
 {
 }
 
 void
-MPU6000_gyro::parent_poll_notify()
+MPU60x0_gyro::parent_poll_notify()
 {
 	poll_notify(POLLIN);
 }
 
 ssize_t
-MPU6000_gyro::read(struct file *filp, char *buffer, size_t buflen)
+MPU60x0_gyro::read(struct file *filp, char *buffer, size_t buflen)
 {
 	return _parent->gyro_read(filp, buffer, buflen);
 }
 
 int
-MPU6000_gyro::ioctl(struct file *filp, int cmd, unsigned long arg)
+MPU60x0_gyro::ioctl(struct file *filp, int cmd, unsigned long arg)
 {
 	return _parent->gyro_ioctl(filp, cmd, arg);
 }
@@ -987,10 +998,10 @@ MPU6000_gyro::ioctl(struct file *filp, int cmd, unsigned long arg)
 /**
  * Local functions in support of the shell command.
  */
-namespace mpu6000
+namespace mpu60x0
 {
 
-MPU6000	*g_dev;
+MPU60x0	*g_dev;
 
 void	start();
 void	test();
@@ -1004,19 +1015,21 @@ void
 start()
 {
 	int fd;
-
-#if 0
 	if (g_dev != nullptr)
 		errx(1, "already started");
-
+	
 	/* create the driver */
-	g_dev = new MPU5999(1 /* XXX magic number */, (spi_dev_e)NAVSTIK_SPIDEV_MPU);
+	g_dev = new MPU60x0(MPU60x0_BUS);
 
-	if (g_dev == nullptr)
+	if (g_dev == nullptr) {
+		errx(1, "MPU60x0 instanciation failed");
 		goto fail;
+	}
 
-	if (OK != g_dev->init())
+	if (OK != g_dev->init()) {
+		errx(1, "MPU60x0 init  failed");
 		goto fail;
+	}
 
 	/* set the poll rate to default, starts automatic data collection */
 	fd = open(ACCEL_DEVICE_PATH, O_RDONLY);
@@ -1024,8 +1037,10 @@ start()
 	if (fd < 0)
 		goto fail;
 
-	if (ioctl(fd, SENSORIOCSPOLLRATE, SENSOR_POLLRATE_DEFAULT) < 0)
+	if (ioctl(fd, SENSORIOCSPOLLRATE, SENSOR_POLLRATE_DEFAULT) < 0) {
+		errx(1, "ioctl failed");
 		goto fail;
+	}
 
 	exit(0);
 fail:
@@ -1036,7 +1051,6 @@ fail:
 	}
 
 	errx(1, "driver start failed");
-#endif
 }
 
 /**
@@ -1057,7 +1071,7 @@ test()
 	fd = open(ACCEL_DEVICE_PATH, O_RDONLY);
 
 	if (fd < 0)
-		err(1, "%s open failed (try 'mpu6000 start' if the driver is not running)",
+		err(1, "%s open failed (try 'mpu60x0 start' if the driver is not running)",
 		    ACCEL_DEVICE_PATH);
 
 	/* get the driver */
@@ -1070,41 +1084,42 @@ test()
 	if (ioctl(fd, SENSORIOCSPOLLRATE, SENSOR_POLLRATE_MANUAL) < 0)
 		err(1, "reset to manual polling");
 
-	/* do a simple demand read */
-	sz = read(fd, &a_report, sizeof(a_report));
+	for (int i = 0; i < 10; i++) {
+		/* do a simple demand read */
+		sz = read(fd, &a_report, sizeof(a_report));
 
-	if (sz != sizeof(a_report))
-		err(1, "immediate acc read failed");
+		if (sz != sizeof(a_report))
+			err(1, "immediate acc read failed");
 
-	warnx("single read");
-	warnx("time:     %lld", a_report.timestamp);
-	warnx("acc  x:  \t%8.4f\tm/s^2", (double)a_report.x);
-	warnx("acc  y:  \t%8.4f\tm/s^2", (double)a_report.y);
-	warnx("acc  z:  \t%8.4f\tm/s^2", (double)a_report.z);
-	warnx("acc  x:  \t%d\traw 0x%0x", (short)a_report.x_raw, (unsigned short)a_report.x_raw);
-	warnx("acc  y:  \t%d\traw 0x%0x", (short)a_report.y_raw, (unsigned short)a_report.y_raw);
-	warnx("acc  z:  \t%d\traw 0x%0x", (short)a_report.z_raw, (unsigned short)a_report.z_raw);
-	warnx("acc range: %8.4f m/s^2 (%8.4f g)", (double)a_report.range_m_s2,
-	      (double)(a_report.range_m_s2 / 9.81f));
+		warnx("single read");
+		warnx("time:     %lld", a_report.timestamp);
+		warnx("acc  x:  \t%8.4f\tm/s^2", (double)a_report.x);
+		warnx("acc  y:  \t%8.4f\tm/s^2", (double)a_report.y);
+		warnx("acc  z:  \t%8.4f\tm/s^2", (double)a_report.z);
+		warnx("acc  x:  \t%d\traw 0x%0x", (short)a_report.x_raw, (unsigned short)a_report.x_raw);
+		warnx("acc  y:  \t%d\traw 0x%0x", (short)a_report.y_raw, (unsigned short)a_report.y_raw);
+		warnx("acc  z:  \t%d\traw 0x%0x", (short)a_report.z_raw, (unsigned short)a_report.z_raw);
+		warnx("acc range: %8.4f m/s^2 (%8.4f g)", (double)a_report.range_m_s2,
+				(double)(a_report.range_m_s2 / 9.81f));
 
-	/* do a simple demand read */
-	sz = read(fd_gyro, &g_report, sizeof(g_report));
+		/* do a simple demand read */
+		sz = read(fd_gyro, &g_report, sizeof(g_report));
 
-	if (sz != sizeof(g_report))
-		err(1, "immediate gyro read failed");
+		if (sz != sizeof(g_report))
+			err(1, "immediate gyro read failed");
 
-	warnx("gyro x: \t% 9.5f\trad/s", (double)g_report.x);
-	warnx("gyro y: \t% 9.5f\trad/s", (double)g_report.y);
-	warnx("gyro z: \t% 9.5f\trad/s", (double)g_report.z);
-	warnx("gyro x: \t%d\traw", (int)g_report.x_raw);
-	warnx("gyro y: \t%d\traw", (int)g_report.y_raw);
-	warnx("gyro z: \t%d\traw", (int)g_report.z_raw);
-	warnx("gyro range: %8.4f rad/s (%d deg/s)", (double)g_report.range_rad_s,
-	      (int)((g_report.range_rad_s / M_PI_F) * 180.0f + 0.5f));
+		warnx("gyro x: \t% 9.5f\trad/s", (double)g_report.x);
+		warnx("gyro y: \t% 9.5f\trad/s", (double)g_report.y);
+		warnx("gyro z: \t% 9.5f\trad/s", (double)g_report.z);
+		warnx("gyro x: \t%d\traw", (int)g_report.x_raw);
+		warnx("gyro y: \t%d\traw", (int)g_report.y_raw);
+		warnx("gyro z: \t%d\traw", (int)g_report.z_raw);
+		warnx("gyro range: %8.4f rad/s (%d deg/s)", (double)g_report.range_rad_s,
+				(int)((g_report.range_rad_s / M_PI_F) * 180.0f + 0.5f));
 
-	warnx("temp:  \t%8.4f\tdeg celsius", (double)a_report.temperature);
-	warnx("temp:  \t%d\traw 0x%0x", (short)a_report.temperature_raw, (unsigned short)a_report.temperature_raw);
-
+		warnx("temp:  \t%8.4f\tdeg celsius", (double)a_report.temperature);
+		warnx("temp:  \t%d\traw 0x%0x", (short)a_report.temperature_raw, (unsigned short)a_report.temperature_raw);
+	}
 
 	/* XXX add poll-rate tests here too */
 
@@ -1151,32 +1166,32 @@ info()
 } // namespace
 
 int
-mpu6000_main(int argc, char *argv[])
+mpu60x0_main(int argc, char *argv[])
 {
 	/*
 	 * Start/load the driver.
 
 	 */
 	if (!strcmp(argv[1], "start"))
-		mpu6000::start();
-
+		mpu60x0::start();
+	else
 	/*
 	 * Test the driver/device.
 	 */
 	if (!strcmp(argv[1], "test"))
-		mpu6000::test();
-
+		mpu60x0::test();
+	else
 	/*
 	 * Reset the driver.
 	 */
 	if (!strcmp(argv[1], "reset"))
-		mpu6000::reset();
-
+		mpu60x0::reset();
+	else
 	/*
 	 * Print driver information.
 	 */
 	if (!strcmp(argv[1], "info"))
-		mpu6000::info();
-
-	errx(1, "unrecognized command, try 'start', 'test', 'reset' or 'info'");
+		mpu60x0::info();
+	else
+		errx(1, "unrecognized command, try 'start', 'test', 'reset' or 'info'");
 }

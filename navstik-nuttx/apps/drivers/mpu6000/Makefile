@@ -1,6 +1,6 @@
 ############################################################################
 #
-#   Copyright (C) 2012 PX4 Development Team. All rights reserved.
+#   Copyright (C) 2013 Navstik Development Team. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -32,10 +32,10 @@
 ############################################################################
 
 #
-# Makefile to build the BMA180 driver.
+# Makefile to build the MPU6050 driver.
 #
 
-APPNAME		 = mpu6000
+APPNAME		 = mpu60x0
 PRIORITY	 = SCHED_PRIORITY_DEFAULT
 STACKSIZE	 = 4096
 
