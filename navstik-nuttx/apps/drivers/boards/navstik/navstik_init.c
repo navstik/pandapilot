@@ -150,6 +150,9 @@ __EXPORT int nsh_archinitialize(void)
 	
 	/* Enable power to peripherals suchg as Telemetry, GPS, Sensors i.e. enable PC10, PA4, PC15 */
 
+        stm32_configgpio(GPIO_SENSOR_PWR_EN);
+        stm32_gpiowrite(GPIO_SENSOR_PWR_EN, true);
+
 	/* configure the high-resolution time/callout interface */
 	hrt_init();
 
