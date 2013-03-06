@@ -153,6 +153,12 @@ __EXPORT int nsh_archinitialize(void)
         stm32_configgpio(GPIO_SENSOR_PWR_EN);
         stm32_gpiowrite(GPIO_SENSOR_PWR_EN, true);
 
+        stm32_configgpio(GPIO_GPS_PWR_EN);
+        stm32_gpiowrite(GPIO_GPS_PWR_EN, true);
+
+        stm32_configgpio(GPIO_TELE_PWR_EN);
+        stm32_gpiowrite(GPIO_TELE_PWR_EN, true);
+
 	/* configure the high-resolution time/callout interface */
 	hrt_init();
 
