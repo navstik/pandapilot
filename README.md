@@ -9,7 +9,7 @@ Setup and Compilation instructions
 
 1. Install the following packages :
 -----------------------------------
-$ sudo apt-get install python-serial python-argparse openocd flex bison libncurses5-dev autoconf texinfo build-essential libftdi-dev libtool zlib1g-dev genromfs git-core wget
+$ sudo apt-get install python-serial python-argparse openocd flex bison libncurses5-dev autoconf texinfo build-essential libftdi-dev libtool zlib1g-dev genromfs git-core wget gawk minicom
 
 
 2. Install toolchain :
@@ -59,6 +59,7 @@ You should see navstik.bin in nuttx/Images directory.
 ----------------------
 Download latest version of dfu-utils with this command : 
 $ git clone git://gitorious.org/dfu-util/dfu-util.git
+Follow the usual configure, make, make install cycle to compile and install dfu-util.
 
 You will notice two small buttons and two jumper switches next to each other on the interface board.
 From the jumpers, put number 2 to 'ON' position and press the buttone named 'NS'. This will put the board into DFU mode.
