@@ -1,1 +1,0 @@
-int mavlink_main(int argc, char *argv[]);

@@ -1,1 +1,0 @@
-int reboot_main(int argc, char *argv[]);

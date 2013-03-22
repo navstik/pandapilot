@@ -1,1 +1,0 @@
-{ "sdlog", SCHED_PRIORITY_MAX - 30, 2048, sdlog_main },

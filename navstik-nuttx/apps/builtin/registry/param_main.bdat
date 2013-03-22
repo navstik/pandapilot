@@ -1,1 +1,0 @@
-{ "param", SCHED_PRIORITY_DEFAULT, 4096, param_main },

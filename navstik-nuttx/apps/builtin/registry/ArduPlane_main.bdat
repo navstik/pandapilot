@@ -1,1 +1,0 @@
-{ "ArduPlane", SCHED_PRIORITY_DEFAULT, 4096, ArduPlane_main },

@@ -1,1 +1,0 @@
-{ "mpu60x0", SCHED_PRIORITY_DEFAULT, 4096, mpu60x0_main },

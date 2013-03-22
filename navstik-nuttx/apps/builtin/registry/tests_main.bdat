@@ -1,1 +1,0 @@
-{ "tests", SCHED_PRIORITY_DEFAULT, 12000, tests_main },

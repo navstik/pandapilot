@@ -1,1 +1,0 @@
-{ "hmc5883", SCHED_PRIORITY_DEFAULT, 4096, hmc5883_main },
