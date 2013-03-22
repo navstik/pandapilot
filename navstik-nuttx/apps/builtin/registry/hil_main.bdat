@@ -1,0 +1,1 @@
+{ "hil", SCHED_PRIORITY_DEFAULT, 2048, hil_main },

@@ -1,0 +1,90 @@
+libxx_cxapurevirtual.o: libxx_cxapurevirtual.cxx \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cassert \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/assert.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/compiler.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdint.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/config.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/limits.h
+libxx_eabi_atexit.o: libxx_eabi_atexit.cxx \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/config.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cstdlib \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdlib.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/compiler.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/sys/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdint.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/limits.h \
+ libxx_internal.hxx
+libxx_cxa_atexit.o: libxx_cxa_atexit.cxx \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/config.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cstdlib \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdlib.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/compiler.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/sys/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdint.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cassert \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/assert.h \
+ libxx_internal.hxx
+libxx_delete.o: libxx_delete.cxx \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/config.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cstdlib \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdlib.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/compiler.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/sys/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdint.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/limits.h
+libxx_deletea.o: libxx_deletea.cxx \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/config.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cstdlib \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdlib.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/compiler.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/sys/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdint.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/limits.h
+libxx_new.o: libxx_new.cxx \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/config.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cstddef \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/compiler.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stddef.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/sys/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdint.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cstdlib \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdlib.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/debug.h
+libxx_newa.o: libxx_newa.cxx \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/config.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cstddef \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/compiler.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stddef.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/sys/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdint.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cstdlib \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdlib.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/debug.h
+libxx_stdthrow.o: libxx_stdthrow.cxx \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/cxx/cstdlib \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/config.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdlib.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/nuttx/compiler.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/sys/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/stdint.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/types.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/arch/limits.h \
+ /home/nitin/navstik/navstik-pilot/navstik-nuttx/nuttx/include/debug.h

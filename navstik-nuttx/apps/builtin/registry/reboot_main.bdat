@@ -1,0 +1,1 @@
+{ "reboot", SCHED_PRIORITY_DEFAULT, 2048, reboot_main },

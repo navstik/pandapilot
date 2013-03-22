@@ -1,0 +1,1 @@
+{ "perf", SCHED_PRIORITY_DEFAULT, 2048, perf_main },

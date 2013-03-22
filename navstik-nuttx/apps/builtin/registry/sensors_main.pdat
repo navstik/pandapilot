@@ -1,0 +1,1 @@
+int sensors_main(int argc, char *argv[]);

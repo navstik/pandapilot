@@ -1,0 +1,1 @@
+{ "delay_test", SCHED_PRIORITY_DEFAULT, 2048, delay_test_main },

@@ -1,0 +1,1 @@
+{ "mavlink", SCHED_PRIORITY_DEFAULT, 2048, mavlink_main },
