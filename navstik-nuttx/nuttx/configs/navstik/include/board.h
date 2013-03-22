@@ -298,9 +298,9 @@
 /*
  * I2C busses
  */
-#define NAVSTIK_I2C_BUS_ESC		1
-#define NAVSTIK_I2C_BUS_ONBOARD	2
-#define NAVSTIK_I2C_BUS_EXPANSION	3
+#define NAVSTIK_I2C_BUS_MPU		1
+#define NAVSTIK_I2C_BUS_ONBOARD		2
+#define NAVSTIK_I2C_BUS_SENSORS		3
 
 /*
  * Devices on the onboard bus.

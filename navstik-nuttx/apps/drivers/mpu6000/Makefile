@@ -32,7 +32,7 @@
 ############################################################################
 
 #
-# Makefile to build the MPU6050 driver.
+# Makefile to build the MPU60x0 driver.
 #
 
 APPNAME		 = mpu60x0

@@ -82,9 +82,9 @@ CONFIGURED_APPS += systemcmds/delay_test
 # Shared object broker; required by many parts of the system.
 CONFIGURED_APPS += uORB
 
-#CONFIGURED_APPS += mavlink
-#CONFIGURED_APPS += mavlink_onboard
-#CONFIGURED_APPS += gps
+CONFIGURED_APPS += mavlink
+CONFIGURED_APPS += mavlink_onboard
+CONFIGURED_APPS += gps
 #CONFIGURED_APPS += commander
 CONFIGURED_APPS += sdlog
 CONFIGURED_APPS += sensors
@@ -104,7 +104,7 @@ CONFIGURED_APPS += systemcmds/i2c
 # Communication and Drivers
 CONFIGURED_APPS += drivers/boards/navstik
 CONFIGURED_APPS	+= drivers/device
-CONFIGURED_APPS += drivers/ms4515
+CONFIGURED_APPS += drivers/bmp180
 CONFIGURED_APPS += drivers/hmc5883
 CONFIGURED_APPS += drivers/mpu6000
 #CONFIGURED_APPS += drivers/bma180
@@ -119,8 +119,8 @@ CONFIGURED_APPS += drivers/navstik
 CONFIGURED_APPS += drivers/hil
 
 # Testing stuff
-#CONFIGURED_APPS += px4/sensors_bringup
-#CONFIGURED_APPS += px4/tests
+CONFIGURED_APPS += px4/sensors_bringup
+CONFIGURED_APPS += px4/tests
 
 ifeq ($(CONFIG_CAN),y)
 #CONFIGURED_APPS += examples/can

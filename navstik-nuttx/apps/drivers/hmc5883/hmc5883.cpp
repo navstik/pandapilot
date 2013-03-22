@@ -75,7 +75,7 @@
  * HMC5883 internal constants and data structures.
  */
 
-#define HMC5883L_BUS			NAVSTIK_I2C_BUS_EXPANSION
+#define HMC5883L_BUS			NAVSTIK_I2C_BUS_SENSORS
 #define HMC5883L_ADDRESS		NAVSTIK_I2C_OBDEV_HMC5883
 
 /* Max measurement rate is 160Hz */
