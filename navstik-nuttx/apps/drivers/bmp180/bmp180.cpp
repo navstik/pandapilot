@@ -100,6 +100,7 @@ struct bmp180_data {
   	int16_t MD  ;
   	float PRESSURE ;
   	float TEMP ;
+	uint32_t UT;
 };
 
 #pragma pack(pop)
@@ -243,7 +244,7 @@ private:
  */
 
 /* internal conversion time: 9.17 ms, so should not be read at rates higher than 100 Hz */
-#define BMP180_CONVERSION_INTERVAL	10000	/* microseconds */
+//#define BMP180_CONVERSION_INTERVAL	10000	/* microseconds */
 #define BMP180_MEASUREMENT_RATIO	3	/* pressure measurements per temperature measurement */
 
 #define BMP180_BUS		NAVSTIK_I2C_BUS_SENSORS
@@ -356,6 +357,9 @@ BMP180::probe()
 int
 BMP180::probe_address(uint8_t address)
 {
+	int	ret;
+	uint8_t bmp_txbuf[2];
+
 	/* select the address we are going to try */
 	set_address(address);
 
@@ -366,6 +370,18 @@ BMP180::probe_address(uint8_t address)
 	/* read PROM */
 	if (OK != read_prom())
 		return -EIO;
+
+	_data.DELAY_TEMP = 5000;
+	_data.OSS = STANDARD;
+	_data.MEASUREMENT_MODE = BMP180_OSS1;
+	_data.DELAY_PRESSURE = 9000;
+
+	bmp_txbuf[0] =  BMP180_CTL;
+	bmp_txbuf[1] = _data.MEASUREMENT_MODE;
+	ret = transfer(bmp_txbuf, 2, nullptr, 0);
+	if (OK != ret)
+		perf_count(_comms_errors);
+	usleep(_data.DELAY_PRESSURE);
 
 	return OK;
 }
@@ -412,7 +428,7 @@ BMP180::read(struct file *filp, char *buffer, size_t buflen)
 			break;
 		}
 
-		usleep(BMP180_CONVERSION_INTERVAL);
+		usleep(_data.DELAY_TEMP);
 
 		if (OK != collect()) {
 			ret = -EIO;
@@ -425,7 +441,7 @@ BMP180::read(struct file *filp, char *buffer, size_t buflen)
 			break;
 		}
 
-		usleep(BMP180_CONVERSION_INTERVAL);
+		usleep(_data.DELAY_PRESSURE);
 
 		if (OK != collect()) {
 			ret = -EIO;
@@ -469,7 +485,7 @@ BMP180::ioctl(struct file *filp, int cmd, unsigned long arg)
 					bool want_start = (_measure_ticks == 0);
 
 					/* set interval for next measurement to minimum legal value */
-					_measure_ticks = USEC2TICK(BMP180_CONVERSION_INTERVAL);
+					_measure_ticks = USEC2TICK(_data.DELAY_PRESSURE);
 
 					/* if we need to start the poll state machine, do it */
 					if (want_start)
@@ -487,7 +503,7 @@ BMP180::ioctl(struct file *filp, int cmd, unsigned long arg)
 					unsigned ticks = USEC2TICK(1000000 / arg);
 
 					/* check against maximum rate */
-					if (ticks < USEC2TICK(BMP180_CONVERSION_INTERVAL))
+					if (ticks < USEC2TICK(_data.DELAY_PRESSURE))
 						return -EINVAL;
 
 					/* update interval for next measurement */
@@ -610,14 +626,14 @@ BMP180::cycle()
 		 * doing pressure measurements at something close to the desired rate.
 		 */
 		if ((_measure_phase != 0) &&
-		    (_measure_ticks > USEC2TICK(BMP180_CONVERSION_INTERVAL))) {
+		    (_measure_ticks > USEC2TICK(_data.DELAY_PRESSURE))) {
 
 			/* schedule a fresh cycle call when we are ready to measure again */
 			work_queue(HPWORK,
 				   &_work,
 				   (worker_t)&BMP180::cycle_trampoline,
 				   this,
-				   _measure_ticks - USEC2TICK(BMP180_CONVERSION_INTERVAL));
+				   _measure_ticks - USEC2TICK(_data.DELAY_PRESSURE));
 
 			return;
 		}
@@ -647,7 +663,7 @@ BMP180::cycle()
 		   &_work,
 		   (worker_t)&BMP180::cycle_trampoline,
 		   this,
-		   USEC2TICK(BMP180_CONVERSION_INTERVAL));
+		   USEC2TICK(_data.DELAY_PRESSURE));
 }
 
 int
@@ -709,6 +725,7 @@ BMP180::collect()
     		b5 = x1 + x2 ;
     		_data.TEMP = (float)((b5 + 8) >> 4) / 10.0f;
 		_TEMP = _data.TEMP*100;
+		_data.UT = ut;
   	} else {
 		int32_t x1, x2, x3, b3, b5, b6, p ;
     		uint32_t b4, b7, up, ut ;
@@ -718,7 +735,7 @@ BMP180::collect()
                       return -EIO;
 		}
 		
-		ut = _data.TEMP;		
+		ut = _data.UT;		
 	
 		up = ((bmp_rxbuf[0] << 16) + (bmp_rxbuf[1] << 8) + bmp_rxbuf[2]) >> (8 - _data.OSS) ;
       		x1 = (ut - _data.AC6) * _data.AC5 >> 15 ;
@@ -866,7 +883,7 @@ BMP180::read_prom()
   
 	bmp_txbuf[0] = 0xAA ;
 
-	if (OK != transfer(bmp_txbuf, 1, bmp_rxbuf, 22)) {
+	if (OK == transfer(bmp_txbuf, 1, bmp_rxbuf, 22)) {
 		_data.AC1 = (bmp_rxbuf[0] << 8) + bmp_rxbuf[1] ;    /*AC1 */
    		_data.AC2 = (bmp_rxbuf[2] << 8) + bmp_rxbuf[3] ;    /*AC2 */
   		_data.AC3 = (bmp_rxbuf[4] << 8) + bmp_rxbuf[5] ;    /*AC3 */
@@ -895,18 +912,6 @@ BMP180::print_info()
 	printf("SENS:           %lld\n", _SENS);
 	printf("OFF:            %lld\n", _OFF);
 	printf("MSL pressure:   %10.4f\n", (double)(_msl_pressure / 100.f));
-
-	printf("AC1             %d\n", _data.AC1);
-	printf("AC2          	%d\n", _data.AC2);
-	printf("AC3        	%d\n", _data.AC3);
-	printf("AC4   		%u\n", _data.AC4);
-	printf("AC5 		%u\n", _data.AC5);
-	printf("AC6         	%u\n", _data.AC6);
-	printf("B1        	%d\n", _data.B1);
-	printf("B2            	%d\n", _data.B2);
-	printf("MB         	%d\n", _data.MB);
-	printf("MC        	%d\n", _data.MC);
-	printf("MD            	%d\n", _data.MD);
 }
 
 /**
