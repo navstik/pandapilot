@@ -43,7 +43,7 @@
 
 /* configuration limits */
 #define PWM_SERVO_MAX_TIMERS	4
-#define PWM_SERVO_MAX_CHANNELS	8
+#define PWM_SERVO_MAX_CHANNELS	6
 
 /* array of timers dedicated to PWM servo use */
 struct pwm_servo_timer {

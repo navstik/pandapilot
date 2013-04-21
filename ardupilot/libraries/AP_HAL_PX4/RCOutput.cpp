@@ -23,7 +23,9 @@ void PX4RCOutput::init(void* unused)
     if (_pwm_fd == -1) {
         hal.scheduler->panic("Unable to open " PWM_OUTPUT_DEVICE_PATH);
     }
-    ioctl(_pwm_fd, PWM_SERVO_ARM, 0);
+    if (ioctl(_pwm_fd, PWM_SERVO_ARM, 0) != 0) {
+        hal.console->printf("RCOutput: Unable to setup IO arming\n");
+    }
 }
 
 void PX4RCOutput::set_freq(uint32_t chmask, uint16_t freq_hz) 
@@ -68,8 +70,8 @@ void PX4RCOutput::write(uint8_t ch, uint16_t period_us)
     if (ch >= PX4_NUM_OUTPUT_CHANNELS) {
         return;
     }
-    if (ch > _max_channel) {
-        _max_channel = ch;
+    if (ch >= _max_channel) {
+        _max_channel = ch + 1;
     }
     if (period_us != _period[ch]) {
         _period[ch] = period_us;

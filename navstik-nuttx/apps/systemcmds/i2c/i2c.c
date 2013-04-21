@@ -57,8 +57,8 @@
 #include "systemlib/systemlib.h"
 #include "systemlib/err.h"
 
-#ifndef NAVSTIK_I2C_BUS_ONBOARD
-#  error NAVSTIK_I2C_BUS_ONBOARD not defined, no device interface
+#ifndef NAVSTIK_I2C_BUS_SENSORS
+#  error NAVSTIK_I2C_BUS_SENSORS not defined, no device interface
 #endif
 
 __EXPORT int i2c_main(int argc, char *argv[]);
@@ -70,7 +70,7 @@ static struct i2c_dev_s *i2c;
 int i2c_main(int argc, char *argv[])
 {
 	/* find the right I2C */
-	i2c = up_i2cinitialize(NAVSTIK_I2C_BUS_ONBOARD);
+	i2c = up_i2cinitialize(NAVSTIK_I2C_BUS_SENSORS);
 
 	if (i2c == NULL)
 		errx(1, "failed to locate I2C bus");

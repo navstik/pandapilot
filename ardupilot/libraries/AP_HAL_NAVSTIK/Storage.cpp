@@ -30,7 +30,7 @@ void NavstikStorage::_storage_create(void)
 	unlink(STORAGE_FILE);
 	_fd = open(STORAGE_FILE, O_RDWR|O_CREAT, 0666);
 	if (_fd == -1) {
-		hal.scheduler->panic("Failed to create " STORAGE_FILE);
+			hal.scheduler->panic("Failed to create " STORAGE_FILE);
 	}
 	for (uint16_t loc=0; loc<sizeof(_buffer); loc += NAVSTIK_STORAGE_MAX_WRITE) {
 		if (write(_fd, &_buffer[loc], NAVSTIK_STORAGE_MAX_WRITE) != NAVSTIK_STORAGE_MAX_WRITE) {

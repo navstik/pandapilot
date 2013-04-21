@@ -12,7 +12,7 @@ uorb start
 # mount binfs so we can find the built-in apps
 mount -t binfs /dev/null /bin
 
-set device /dev/ttyS1
+set device /dev/ttyS2
 set sketch NONE
 
 if [ -f /bin/ArduPlane ]
@@ -33,18 +33,18 @@ fi
 if [ $sketch != NONE ]
 then
 	echo "Starting APM sensors"
-	mpu6000 start
-	ms5611 start
+	mpu60x0 start
+	bmp180 start
 	hmc5883 start
 	adc start
 
 	fmu start mode_pwm
-	if [ $device == /dev/ttyS1 ]
-	then
+#	if [ $device == /dev/ttyS1 ]
+#	then
 # ttyS1 is used for PWM output when there
 # is no IO board
-	set device /dev/ttyS2
-	fi
+#	set device /dev/ttyS2
+#	fi
 
 	echo Starting $sketch
 	$sketch -d $device start

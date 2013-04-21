@@ -21,7 +21,7 @@ void NavstikRCOutput::init(void* unused)
     _perf_rcout = perf_alloc(PC_ELAPSED, "APM_rcout");
     _pwm_fd = open(PWM_OUTPUT_DEVICE_PATH, O_RDWR);
     if (_pwm_fd == -1) {
-        hal.scheduler->panic("Unable to open " PWM_OUTPUT_DEVICE_PATH);
+	hal.scheduler->panic("Unable to open " PWM_OUTPUT_DEVICE_PATH);
     }
     ioctl(_pwm_fd, PWM_SERVO_ARM, 0);
 }

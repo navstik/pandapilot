@@ -61,8 +61,8 @@
 #include "systemlib/param/param.h"
 #include "systemlib/err.h"
 
-#ifndef NAVSTIK_I2C_BUS_ONBOARD
-#  error NAVSTIK_I2C_BUS_ONBOARD not defined, cannot locate onboard EEPROM
+#ifndef NAVSTIK_I2C_BUS_SENSORS
+#  error NAVSTIK_I2C_BUS_SENSORS not defined, cannot locate onboard EEPROM
 #endif
 
 __EXPORT int eeprom_main(int argc, char *argv[]);
@@ -115,7 +115,7 @@ static void
 eeprom_attach(void)
 {
 	/* find the right I2C */
-	struct i2c_dev_s *i2c = up_i2cinitialize(NAVSTIK_I2C_BUS_ONBOARD);
+	struct i2c_dev_s *i2c = up_i2cinitialize(NAVSTIK_I2C_BUS_SENSORS);
 	/* this resets the I2C bus, set correct bus speed again */
 	I2C_SETFREQUENCY(i2c, 400000);
 

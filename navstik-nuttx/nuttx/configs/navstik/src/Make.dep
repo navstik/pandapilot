@@ -1,1 +1,0 @@
-empty.o: empty.c

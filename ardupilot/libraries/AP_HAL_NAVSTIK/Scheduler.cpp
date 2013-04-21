@@ -24,7 +24,7 @@ using namespace Navstik;
 
 extern const AP_HAL::HAL& hal;
 
-extern bool _px4_thread_should_exit;
+extern bool _navstik_thread_should_exit;
 
 NavstikScheduler::NavstikScheduler() :
     _perf_timers(perf_alloc(PC_ELAPSED, "APM_timers")),
@@ -93,7 +93,7 @@ void NavstikScheduler::delay(uint16_t ms)
 	uint64_t start = hrt_absolute_time();
     
     while ((hrt_absolute_time() - start)/1000 < ms && 
-           !_px4_thread_should_exit) {
+           !_navstik_thread_should_exit) {
         // this yields the CPU to other apps
         poll(NULL, 0, 1);
         if (_min_delay_cb_ms <= ms) {
@@ -103,7 +103,7 @@ void NavstikScheduler::delay(uint16_t ms)
         }
     }
     perf_end(_perf_delay);
-    if (_px4_thread_should_exit) {
+    if (_navstik_thread_should_exit) {
         exit(1);
     }
 }
@@ -184,7 +184,7 @@ void NavstikScheduler::_run_timers(bool called_from_timer_thread)
 
 void *NavstikScheduler::_timer_thread(void)
 {
-    while (!_px4_thread_should_exit) {
+    while (!_navstik_thread_should_exit) {
         poll(NULL, 0, 1);
 
         // run registered timers
@@ -200,7 +200,7 @@ void *NavstikScheduler::_timer_thread(void)
 
 void *NavstikScheduler::_io_thread(void)
 {
-    while (!_px4_thread_should_exit) {
+    while (!_navstik_thread_should_exit) {
         poll(NULL, 0, 1);
 
         // process any pending serial bytes
@@ -218,7 +218,7 @@ void NavstikScheduler::panic(const prog_char_t *errormsg)
     write(1, errormsg, strlen(errormsg));
     write(1, "\n", 1);
     hal.scheduler->delay_microseconds(10000);
-    _px4_thread_should_exit = true;
+    _navstik_thread_should_exit = true;
     exit(1);
 }
 

@@ -201,12 +201,14 @@ __EXPORT int nsh_archinitialize(void)
 	}
 
 	// Default SPI2 to 1MHz and de-assert the known chip selects.
-	SPI_SETFREQUENCY(spi2, 10000000);
-	SPI_SETBITS(spi2, 8);
-	SPI_SETMODE(spi2, SPIDEV_MODE3);
+	//SPI_SETFREQUENCY(spi2, 10000000);
+	//SPI_SETBITS(spi2, 8);
+	//SPI_SETMODE(spi2, SPIDEV_MODE3);
+	//SPI_SELECT(spi2, NAVSTIK_SPIDEV_FLASH, false);
+	//SPI_SELECT(spi2, NAVSTIK_SPIDEV_SDCARD, false);
+	//up_udelay(20);
+
 	SPI_SELECT(spi2, NAVSTIK_SPIDEV_FLASH, false);
-	SPI_SELECT(spi2, NAVSTIK_SPIDEV_SDCARD, false);
-	up_udelay(20);
 	message("[boot] Successfully initialized SPI port 2\r\n");
 
 	/* Now bind the SPI interface to the MMCSD driver */
@@ -219,10 +221,10 @@ __EXPORT int nsh_archinitialize(void)
 	}
 	message("[boot] Successfully bound SPI port 2 to the MMCSD driver\n");
 
-	stm32_configgpio(GPIO_ADC1_IN10);
+	stm32_configgpio(GPIO_ADC1_IN1);
 	stm32_configgpio(GPIO_ADC1_IN11);
-	stm32_configgpio(GPIO_ADC1_IN12);
-	stm32_configgpio(GPIO_ADC1_IN13);	// jumperable to MPU6000 DRDY on some boards
+//	stm32_configgpio(GPIO_ADC1_IN12);
+//	stm32_configgpio(GPIO_ADC1_IN13);	// jumperable to MPU6000 DRDY on some boards
 
 	return OK;
 }

@@ -87,7 +87,7 @@
 #define STM32_HSI_FREQUENCY     16000000ul
 #define STM32_LSI_FREQUENCY     32000
 #define STM32_HSE_FREQUENCY     STM32_BOARD_XTAL
-#define STM32_LSE_FREQUENCY     0
+//#define STM32_LSE_FREQUENCY     0
 
 /* Main PLL Configuration.
  *
@@ -141,9 +141,9 @@
 
 #define STM32_APB2_TIM1_CLKIN   (2*STM32_PCLK2_FREQUENCY)
 #define STM32_APB2_TIM8_CLKIN   (2*STM32_PCLK2_FREQUENCY)
-#define STM32_APB2_TIM9_CLKIN   (2*STM32_PCLK1_FREQUENCY)
-#define STM32_APB2_TIM10_CLKIN  (2*STM32_PCLK1_FREQUENCY)
-#define STM32_APB2_TIM11_CLKIN  (2*STM32_PCLK1_FREQUENCY)
+#define STM32_APB2_TIM9_CLKIN   (2*STM32_PCLK2_FREQUENCY)
+#define STM32_APB2_TIM10_CLKIN  (2*STM32_PCLK2_FREQUENCY)
+#define STM32_APB2_TIM11_CLKIN  (2*STM32_PCLK2_FREQUENCY)
 
 /* Timer Frequencies, if APBx is set to 1, frequency is same to APBx
  * otherwise frequency is 2xAPBx. 
@@ -186,7 +186,7 @@
 /* High-resolution timer
  */
 #ifdef CONFIG_HRT_TIMER
-# define HRT_TIMER		1	/* use timer1 for the HRT */
+# define HRT_TIMER		4	/* use timer4 for the HRT */
 # define HRT_TIMER_CHANNEL	1	/* use capture/compare channel */
 #endif
 
@@ -272,7 +272,7 @@
  *  PPM input is handled by the HRT timer.
  */
 #if defined(CONFIG_HRT_TIMER) && defined (CONFIG_HRT_PPM)
-# define HRT_PPM_CHANNEL    1   /* use capture/compare channel 1 */
+# define HRT_PPM_CHANNEL	3	/* use capture/compare channel 3 */
 # define GPIO_PPM_IN		(GPIO_ALT|GPIO_AF9|GPIO_SPEED_50MHz|GPIO_PULLUP|GPIO_PORTA|GPIO_PIN7)
 #endif
 
@@ -299,7 +299,7 @@
  * I2C busses
  */
 #define NAVSTIK_I2C_BUS_MPU		1
-#define NAVSTIK_I2C_BUS_ONBOARD		2
+//#define NAVSTIK_I2C_BUS_EXT		2
 #define NAVSTIK_I2C_BUS_SENSORS		3
 
 /*
@@ -326,7 +326,7 @@
 
 /*
  * Use these in place of the spi_dev_e enumeration to
- * select a specific SPI device on SPI1
+ * select a specific SPI device on SPI2
  */
 #define NAVSTIK_SPIDEV_FLASH	1
 #define NAVSTIK_SPIDEV_SDCARD	2

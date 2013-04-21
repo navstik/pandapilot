@@ -84,17 +84,17 @@ __EXPORT void weak_function stm32_spiinitialize(void)
 
 __EXPORT void stm32_spi2select(FAR struct spi_dev_s *dev, enum spi_dev_e devid, bool selected)
 {
-	/* SPI select is active low, so write !selected to select the device */
 
-	switch (devid) {
+	/* SPI select is active low, so write !selected to select the device */
+/*	switch (devid) {
 	case NAVSTIK_SPIDEV_FLASH:
-		/* Making sure the other peripherals are not selected */
+		// Making sure the other peripherals are not selected
 		stm32_gpiowrite(GPIO_SPI_CS_FLASH, !selected);
 		stm32_gpiowrite(GPIO_SPI_CS_SDCARD, selected);
 		break;
 
 	case NAVSTIK_SPIDEV_SDCARD:
-		/* Making sure the other peripherals are not selected */
+		// Making sure the other peripherals are not selected
 		stm32_gpiowrite(GPIO_SPI_CS_SDCARD, !selected);
 		stm32_gpiowrite(GPIO_SPI_CS_FLASH, selected);
 		break;
@@ -103,6 +103,10 @@ __EXPORT void stm32_spi2select(FAR struct spi_dev_s *dev, enum spi_dev_e devid, 
 		break;
 
 	}
+*/
+
+		stm32_gpiowrite(GPIO_SPI_CS_SDCARD, !selected);
+
 }
 
 __EXPORT uint8_t stm32_spi1status(FAR struct spi_dev_s *dev, enum spi_dev_e devid)

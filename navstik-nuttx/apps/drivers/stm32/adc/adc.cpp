@@ -367,7 +367,8 @@ adc_main(int argc, char *argv[])
 {
 	if (g_adc == nullptr) {
 		/* XXX this hardcodes the default channel set for PX4FMU - should be configurable */
-		g_adc = new ADC((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13));
+//		g_adc = new ADC((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13));
+		g_adc = new ADC((1 << 1) | (1 << 11));
 
 		if (g_adc == nullptr)
 			errx(1, "couldn't allocate the ADC driver");

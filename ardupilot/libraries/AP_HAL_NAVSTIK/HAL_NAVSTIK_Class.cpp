@@ -44,12 +44,14 @@ static NavstikAnalogIn analogIn;
 static NavstikUtil utilInstance;
 
 #define UARTA_DEFAULT_DEVICE "/dev/ttyS0"
-#define UARTB_DEFAULT_DEVICE "/dev/ttyS3"
+#define UARTB_DEFAULT_DEVICE "/dev/ttyS1"
+#define UARTC_DEFAULT_DEVICE "/dev/ttyS2"
 
 // only two real UART drivers for now
 static NavstikUARTDriver uartADriver(UARTA_DEFAULT_DEVICE, "APM_uartA");
 static NavstikUARTDriver uartBDriver(UARTB_DEFAULT_DEVICE, "APM_uartB");
-static Empty::EmptyUARTDriver uartCDriver;
+static NavstikUARTDriver uartCDriver(UARTC_DEFAULT_DEVICE, "APM_uartC");
+//static Empty::EmptyUARTDriver uartCDriver;
 
 HAL_Navstik::HAL_Navstik() :
     AP_HAL::HAL(
@@ -68,7 +70,7 @@ HAL_Navstik::HAL_Navstik() :
         &utilInstance) /* util */
 {}
 
-bool _px4_thread_should_exit = false;		/**< Daemon exit flag */
+bool _navstik_thread_should_exit = false;		/**< Daemon exit flag */
 static bool thread_running = false;		/**< Daemon status flag */
 static int daemon_task;				/**< Handle of daemon task / thread */
 static bool ran_overtime;
@@ -108,7 +110,9 @@ static int main_loop(int argc, char **argv)
     extern void loop(void);
 
 
-    hal.uartA->begin(57600);
+    hal.uartA->begin(115200);
+    hal.uartB->begin(9600);
+    hal.uartC->begin(115200);
     hal.console->init((void*) hal.uartA);
     hal.scheduler->init(NULL);
     hal.rcin->init(NULL);
@@ -139,7 +143,7 @@ static int main_loop(int argc, char **argv)
      */
     set_priority(APM_MAIN_PRIORITY);
 
-    while (!_px4_thread_should_exit) {
+    while (!_navstik_thread_should_exit) {
         perf_begin(perf_loop);
         
         /*
@@ -195,7 +199,7 @@ static void usage(void)
 void HAL_Navstik::init(int argc, char * const argv[]) const 
 {
     int i;
-    const char *device = UARTA_DEFAULT_DEVICE;
+    const char *deviceA = UARTA_DEFAULT_DEVICE;
 
     if (argc < 1) {
 		printf("%s: missing command (try '%s start')", 
@@ -212,10 +216,10 @@ void HAL_Navstik::init(int argc, char * const argv[]) const
                 exit(0);
             }
 
-            uartADriver.set_device_path(device);
-            printf("Starting %s on %s\n", SKETCHNAME, device);
+            uartADriver.set_device_path(deviceA);
+            printf("Starting %s on %s\n", SKETCHNAME, deviceA);
 
-            _px4_thread_should_exit = false;
+            _navstik_thread_should_exit = false;
             daemon_task = task_spawn(SKETCHNAME,
                                      SCHED_FIFO,
                                      APM_MAIN_PRIORITY,
@@ -226,12 +230,12 @@ void HAL_Navstik::init(int argc, char * const argv[]) const
         }
 
         if (strcmp(argv[i], "stop") == 0) {
-            _px4_thread_should_exit = true;
+            _navstik_thread_should_exit = true;
             exit(0);
         }
  
         if (strcmp(argv[i], "status") == 0) {
-            if (_px4_thread_should_exit && thread_running) {
+            if (_navstik_thread_should_exit && thread_running) {
                 printf("\t%s is exiting\n", SKETCHNAME);
             } else if (thread_running) {
                 printf("\t%s is running\n", SKETCHNAME);
@@ -244,7 +248,7 @@ void HAL_Navstik::init(int argc, char * const argv[]) const
 		if (strcmp(argv[i], "-d") == 0) {
             // set terminal device
 			if (argc > i + 1) {
-                device = strdup(argv[i+1]);
+                deviceA = strdup(argv[i+1]);
 			} else {
 				printf("missing parameter to -d DEVICE\n");
                 usage();

@@ -100,7 +100,6 @@ struct bmp180_data {
   	int16_t MD  ;
   	float PRESSURE ;
   	float TEMP ;
-	uint32_t UT;
 };
 
 #pragma pack(pop)
@@ -140,6 +139,7 @@ private:
 
 	/* intermediate temperature values per BMP180 datasheet */
 	int32_t			_TEMP;
+	uint32_t		_UT;
 	int64_t			_OFF;
 	int64_t			_SENS;
 
@@ -263,7 +263,7 @@ private:
 #define BMP180_OSS2        	0xB4 // Value of Control Register for Conversion time 13.5ms
 #define BMP180_OSS3        	0xF4 // Value of Control Register for Conversion time 25.5ms
 
-#define BMP180_PRES        	0xF4 // pressure with OSRS=3 (page 17 in manual)
+#define BMP180_PRES        	0x34 // base value for pressure measurement (page 15 of datasheet)
 
 #define ULTRA_LOW_POWER     	0
 #define STANDARD        	1
@@ -678,7 +678,7 @@ BMP180::measure()
 	uint8_t bmp_txbuf[2];
 
 	bmp_txbuf[0] = BMP180_CTL;
-	bmp_txbuf[1] = (_measure_phase == 0) ? BMP180_TEMP : BMP180_PRES;
+	bmp_txbuf[1] = (_measure_phase == 0) ? BMP180_TEMP : (BMP180_PRES + (_data.OSS << 6));
 
 	/*
 	 * Send the command to begin measuring.
@@ -725,7 +725,8 @@ BMP180::collect()
     		b5 = x1 + x2 ;
     		_data.TEMP = (float)((b5 + 8) >> 4) / 10.0f;
 		_TEMP = _data.TEMP*100;
-		_data.UT = ut;
+		_UT = ut;
+		//printf("%s:%d: swapnil: _UT = %u, _TEMP = %d\n", __func__, __LINE__, _UT, _TEMP);
   	} else {
 		int32_t x1, x2, x3, b3, b5, b6, p ;
     		uint32_t b4, b7, up, ut ;
@@ -735,7 +736,8 @@ BMP180::collect()
                       return -EIO;
 		}
 		
-		ut = _data.UT;		
+		ut = _UT;		
+		//printf("%s:%d: swapnil: _UT = %u, _TEMP = %d\n", __func__, __LINE__, _UT, _TEMP);
 	
 		up = ((bmp_rxbuf[0] << 16) + (bmp_rxbuf[1] << 8) + bmp_rxbuf[2]) >> (8 - _data.OSS) ;
       		x1 = (ut - _data.AC6) * _data.AC5 >> 15 ;
@@ -1007,7 +1009,7 @@ test()
 		errx(1, "failed to set 2Hz poll rate");
 
 	/* read the sensor 5x and report each value */
-	for (unsigned i = 0; i < 5; i++) {
+	for (unsigned i = 0; i < 15; i++) {
 		struct pollfd fds;
 
 		/* wait for data to be ready */
