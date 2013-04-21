@@ -9,7 +9,7 @@ Setup and Compilation instructions
 
 1. Install the following packages :
 -----------------------------------
-$ sudo apt-get install python-serial python-argparse openocd flex bison libncurses5-dev autoconf texinfo build-essential libftdi-dev libtool zlib1g-dev genromfs git-core wget gawk minicom
+$ sudo apt-get install python-serial python-argparse openocd flex bison libncurses5-dev autoconf texinfo build-essential libftdi-dev libtool zlib1g-dev genromfs git-core wget gawk minicom libusb-1.0-0-dev
 
 
 2. Install toolchain :
@@ -64,7 +64,7 @@ Follow the usual configure, make, make install cycle to compile and install dfu-
 You will notice two small buttons and two jumper switches next to each other on the interface board.
 From the jumpers, put number 2 to 'ON' position and press the buttone named 'NS'. This will put the board into DFU mode.
 Issue the following command : 
-$ sudo dfu-util --device 0483:df11 -a0 --fuse-address 0x8000000 -D path/to/navstik-nuttx/Images/navstik.bin
+$ sudo dfu-util --device 0483:df11 -a0 --dfuse-address 0x8000000 -D path/to/navstik-nuttx/Images/navstik.bin
 
 Once the code is downloaded, bring switch 2 to OFF position and reset the board.
 
