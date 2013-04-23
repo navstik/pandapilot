@@ -726,10 +726,6 @@ BMP180::collect()
     		_data.TEMP = (float)((b5 + 8) >> 4) / 10.0f;
 		_TEMP = _data.TEMP*100;
 		_UT = ut;
-<<<<<<< HEAD
-		//printf("%s:%d: swapnil: _UT = %u, _TEMP = %d\n", __func__, __LINE__, _UT, _TEMP);
-=======
->>>>>>> ec0ba228fc44d1ad238b1060f92f1c8b3ce5647b
   	} else {
 		int32_t x1, x2, x3, b3, b5, b6, p ;
     		uint32_t b4, b7, up, ut ;
@@ -740,11 +736,6 @@ BMP180::collect()
 		}
 		
 		ut = _UT;		
-<<<<<<< HEAD
-		//printf("%s:%d: swapnil: _UT = %u, _TEMP = %d\n", __func__, __LINE__, _UT, _TEMP);
-=======
->>>>>>> ec0ba228fc44d1ad238b1060f92f1c8b3ce5647b
-	
 		up = ((bmp_rxbuf[0] << 16) + (bmp_rxbuf[1] << 8) + bmp_rxbuf[2]) >> (8 - _data.OSS) ;
       		x1 = (ut - _data.AC6) * _data.AC5 >> 15 ;
       		x2 = ((int32_t)_data.MC << 11) / (x1 + _data.MD) ;
