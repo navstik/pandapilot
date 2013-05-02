@@ -1,7 +1,7 @@
-navstik-pilot
-=============
+PandaPilot
+==========
 
-Ardupilot port for NavStik.
+OpenSource code for autopilot application. It makes use of ArduPilot and is a fork of PX4 code. PandaPilot currently supports NavStik hardware (based on STM32F4).
 
 
 Setup and Compilation instructions
@@ -38,13 +38,10 @@ HAL_BOARD ?= HAL_BOARD_NAVSTIK
 # The communication port used to communicate with the APM.
 PORT = /dev/ttyACM0
 
-# PX4 app build: uncomment and fill in the path to PX4 Firmware repository:
-# PX4_ROOT = /home/amit/work/navstik/PX4-firmware
-
 # NAVSTIK app build: uncomment and fill in the path to Navstik Firmware repository:
-NAVSTIK_ROOT = /home/amit/work/navstik/navstik-pilot/navstik-pilot/navstik-nuttx/
+NAVSTIK_ROOT = /home/amit/work/navstik/pandapilot/firmware/
 
-APPDIR = /home/amit/work/navstik/navstik-pilot/navstik-pilot/navstik-nuttx/apps
+APPDIR = /home/amit/work/navstik/pandapilot/firmware/apps
 
 #ARDUINO = /home/amit/work/navstik/arduino-1.0.3
 
