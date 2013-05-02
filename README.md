@@ -23,8 +23,10 @@ export PATH=/your/path/gcc-arm-none-eabi-4_6-2012q2/bin:\$PATH
 
 3. Configure build environment :
 --------------------------------
-~/nuttx-path/nuttx/tools$ ./configure.sh navstik/nsh
-~/nuttx-path$ make configure_navstik
+
+~/firmware/nuttx/tools$ ./configure.sh navstik/nsh
+
+~/firmware$ make configure_navstik
 
 Your ardupilot/config.mk file should look like this (replace paths with your actual paths) :
 ~/ArduPlane-path$ cat ../config.mk
@@ -38,12 +40,10 @@ HAL_BOARD ?= HAL_BOARD_NAVSTIK
 # The communication port used to communicate with the APM.
 PORT = /dev/ttyACM0
 
-# NAVSTIK app build: uncomment and fill in the path to Navstik Firmware repository:
+# NAVSTIK app build: fill in the path to PandaPilot Firmware repository:
 NAVSTIK_ROOT = /home/amit/work/navstik/pandapilot/firmware/
 
 APPDIR = /home/amit/work/navstik/pandapilot/firmware/apps
-
-#ARDUINO = /home/amit/work/navstik/arduino-1.0.3
 
 
 4. Compile the code :
