@@ -65,6 +65,8 @@ $ sudo dfu-util --device 0483:df11 -a0 --dfuse-address 0x8000000 -D path/to/navs
 
 Once the code is downloaded, bring switch 2 to OFF position and reset the board.
 
+BTW, you need to insert a micro-SD card to run any of the sketches. Else it will not be able to create the .stg file, and will stop executing the script further.
+
 Happy hacking! :)
 
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/3491608aa7e8d99999785bf74fa3b1a5 "githalytics.com")](http://githalytics.com/navstik/pandapilot)
