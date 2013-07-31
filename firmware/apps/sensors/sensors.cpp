@@ -88,7 +88,8 @@
 #define BARO_HEALTH_COUNTER_LIMIT_OK 5
 #define ADC_HEALTH_COUNTER_LIMIT_OK  5
 
-#define ADC_BATTERY_VOLTAGE_CHANNEL  10
+#define ADC_BATTERY_VOLTAGE_CHANNEL  11
+#define ADC_BATTERY_CURRENT_CHANNEL  1
 
 #define BAT_VOL_INITIAL 12.f
 #define BAT_VOL_LOWPASS_1 0.99f
@@ -984,7 +985,13 @@ Sensors::adc_poll(struct sensor_combined_s &raw)
 		/* make space for a maximum of eight channels */
 		struct adc_msg_s buf_adc[8];
 		/* read all channels available */
-		int ret = read(_fd_adc, &buf_adc, sizeof(buf_adc));
+		int ret = read(_fd_adc, buf_adc, sizeof(buf_adc));
+		
+		unsigned channels = ret / sizeof(buf_adc[0]);
+/*		
+		for (unsigned j = 0; j < channels; j++) {
+			printf ("%d: %u  ", buf_adc[j].am_channel, buf_adc[j].am_data);
+		}
 
 		/* look for battery channel */
 
@@ -993,18 +1000,40 @@ Sensors::adc_poll(struct sensor_combined_s &raw)
 			if (ret >= sizeof(buf_adc[0]) && ADC_BATTERY_VOLTAGE_CHANNEL == buf_adc[i].am_channel) {
 				/* Voltage in volts */
 				float voltage = (buf_adc[i].am_data * _parameters.battery_voltage_scaling);
-
+//				printf ("\nVoltage : %.4f",voltage) ;
+				
+				
 				if (voltage > VOLTAGE_BATTERY_IGNORE_THRESHOLD_VOLTS) {
 
 					/* one-time initialization of low-pass value to avoid long init delays */
 					if (_battery_status.voltage_v < 3.0f) {
-						_battery_status.voltage_v = voltage;
+					
+		_battery_status.voltage_v = voltage;
 					}
 
 					_battery_status.timestamp = hrt_absolute_time();
 					_battery_status.voltage_v = (BAT_VOL_LOWPASS_1 * (_battery_status.voltage_v + BAT_VOL_LOWPASS_2 * voltage));;
+		
+					/* announce the battery voltage if needed, just publish else */
+					if (_battery_pub > 0) {
+						orb_publish(ORB_ID(battery_status), _battery_pub, &_battery_status);
+
+					} else {
+						_battery_pub = orb_advertise(ORB_ID(battery_status), &_battery_status);
+					}
+				}
+
+				_last_adc = hrt_absolute_time();
+			//	break;
+			}
+
+		if (ret >= sizeof(buf_adc[0]) && ADC_BATTERY_CURRENT_CHANNEL == buf_adc[i].am_channel) { 
+				/* Voltage in volts */
+				float curr_voltage = (buf_adc[i].am_data * _parameters.battery_voltage_scaling);
+//				printf ("\nVoltage : %.4f",voltage) ;
+				
 					/* current and discharge are unknown */
-					_battery_status.current_a = -1.0f;
+					_battery_status.current_a = curr_voltage * 5000 / 200 / 0.051;
 					_battery_status.discharged_mah = -1.0f;
 
 					/* announce the battery voltage if needed, just publish else */
@@ -1017,11 +1046,12 @@ Sensors::adc_poll(struct sensor_combined_s &raw)
 				}
 
 				_last_adc = hrt_absolute_time();
-				break;
+			//	break;
 			}
+
 		}
 	}
-}
+
 
 #if CONFIG_HRT_PPM
 void
@@ -1030,6 +1060,7 @@ Sensors::ppm_poll()
 	/* fake low-level driver, directly pulling from driver variables */
 	static orb_advert_t rc_input_pub = -1;
 	struct rc_input_values raw;
+	extern volatile uint16_t rc_buffer[6];
 
 	raw.timestamp = ppm_last_valid_decode;
 	/* we are accepting this message */
@@ -1043,7 +1074,7 @@ Sensors::ppm_poll()
 	if (ppm_decoded_channels > 4 && hrt_absolute_time() - _ppm_last_valid < PPM_INPUT_TIMEOUT_INTERVAL) {
 
 		for (unsigned i = 0; i < ppm_decoded_channels; i++) {
-			raw.values[i] = ppm_buffer[i];
+			raw.values[i] = rc_buffer[i];
 		}
 
 		raw.channel_count = ppm_decoded_channels;
@@ -1255,11 +1286,11 @@ Sensors::task_main()
 	fflush(stdout);
 
 	/* start individual sensors */
-	accel_init();
 	gyro_init();
 	mag_init();
 	baro_init();
 	adc_init();
+	accel_init();
 
 	/*
 	 * do subscriptions
@@ -1396,7 +1427,6 @@ int sensors_main(int argc, char *argv[])
 
 		if (sensors::g_sensors == nullptr)
 			errx(1, "sensors task alloc failed");
-
 		if (OK != sensors::g_sensors->start()) {
 			delete sensors::g_sensors;
 			sensors::g_sensors = nullptr;

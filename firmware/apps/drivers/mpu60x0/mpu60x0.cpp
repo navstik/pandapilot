@@ -150,7 +150,7 @@
 #define MPU6000_REV_D8			0x58
 #define MPU6000_REV_D9			0x59
 #define MPU6000_REV_D10			0x5A
-
+#define MPU6000_REV_D11			0x28
 
 class MPU60x0_gyro;
 
@@ -423,6 +423,7 @@ MPU60x0::init()
 	case MPU6000_REV_D8:
 	case MPU6000_REV_D9:
 	case MPU6000_REV_D10:
+	case MPU6000_REV_D11:
 		// Accel scale 8g (4096 LSB/g)
 		write_reg(MPUREG_ACCEL_CONFIG, 2 << 3);
 		break;
@@ -483,6 +484,7 @@ MPU60x0::probe()
 	case MPU6000_REV_D8:
 	case MPU6000_REV_D9:
 	case MPU6000_REV_D10:
+	case MPU6000_REV_D11:
 		debug("ID 0x%02x", _product);
 		return OK;
 	}

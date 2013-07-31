@@ -9,7 +9,8 @@ using namespace Navstik;
 extern const AP_HAL::HAL& hal;
 
 #if CONFIG_HRT_PPM
-extern uint16_t ppm_buffer[];
+extern uint16_t rc_buffer[6];
+//extern uint16_t ppm_buffer[32];
 extern unsigned ppm_decoded_channels;
 
 extern uint64_t ppm_last_valid_decode;
@@ -39,7 +40,7 @@ uint16_t NavstikRCInput::read(uint8_t ch)
 	if (_override[ch]) {
 		return _override[ch];
 	}
-	return ppm_buffer[ch];
+	return rc_buffer[ch];
 }
 
 uint8_t NavstikRCInput::read(uint16_t* periods, uint8_t len) 

@@ -74,6 +74,7 @@ void NavstikRCOutput::write(uint8_t ch, uint16_t period_us)
     if (period_us != _period[ch]) {
         _period[ch] = period_us;
         _need_update = true;
+        up_pwm_servo_set(ch, period_us);    
     }
 }
 
