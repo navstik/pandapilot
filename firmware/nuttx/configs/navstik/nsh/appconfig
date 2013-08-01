@@ -82,7 +82,6 @@ CONFIGURED_APPS += systemcmds/delay_test
 # Shared object broker; required by many parts of the system.
 CONFIGURED_APPS += uORB
 
-CONFIGURED_APPS += simple
 CONFIGURED_APPS += pwm_input
 CONFIGURED_APPS += pwm_output
 CONFIGURED_APPS += gps_config
