@@ -1,9 +1,9 @@
 #include <uORB/topics/battery_status.h>
 #include <stdio.h>
 
-__EXPORT int  test_battery_main(int argc, char *argv[]);
+__EXPORT int  test_battery(int argc, char *argv[]);
 
-int	test_battery_main(int argc, char *argv[])
+int	test_battery(int argc, char *argv[])
 {
 	int battery_sub_fd = orb_subscribe(ORB_ID(battery_status));
  
@@ -13,5 +13,9 @@ int	test_battery_main(int argc, char *argv[])
 		orb_copy(ORB_ID(battery_status), battery_sub_fd, &raw);
 		printf("\nVoltage : %.4f\n",raw.voltage_v);
 		printf("\nCurrent : %.4f\n",raw.current_a);
-}
+		
+		if (raw.voltage_v == 0.0)
+			return -1 ;
 
+return 0 ;
+}

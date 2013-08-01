@@ -10,9 +10,10 @@
 int test_axes_x(double x,int flag_x,int *p_x);
 int test_axes_y(double y,int flag_y,int flag_x,int *p_y);
 int test_axes_z(double z,int flag_z,int flag_x,int flag_y,int *p,int *p_z);
-__EXPORT int test_accelerometer_main(int argc, char *argv[]);
+
+__EXPORT int test_accelerometer(int argc, char *argv[]);
  
-int test_accelerometer_main(int argc, char *argv[])
+int test_accelerometer(int argc, char *argv[])
 {	
 	double x=0,y=0,z=0;
 	int flag_x_n=0,flag_y_n=0,flag_z_n=0,FLAG=0,flag_x_p=0,flag_y_p=0,flag_z_p=0,end_count=0;
@@ -119,8 +120,8 @@ int test_accelerometer_main(int argc, char *argv[])
 
 		if (end_count > 1000)
 		{
-			printf("\nAccelerometer testing failed.\n");			
-			break;
+			printf("\nAccelerometer testing failed.\n");
+			return -1 ;
 		}
 			
 	end_count++ ;

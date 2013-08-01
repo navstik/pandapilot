@@ -7,9 +7,9 @@
 #include <uORB/topics/sensor_combined.h>
 
 
-__EXPORT int test_barometer_main(int argc, char *argv[]);
+__EXPORT int test_barometer(int argc, char *argv[]);
  
-int test_barometer_main(int argc, char *argv[])
+int test_barometer(int argc, char *argv[])
 {	
 	double press_acc=0 ;
 	float x,press_low,press_high ;
@@ -124,13 +124,13 @@ int test_barometer_main(int argc, char *argv[])
 		else 
 			{
 			printf("\n\nPressure Difference below 10 Pascals : %.4f Pascals !!\n",(press_low - press_high));
-			break ;
+			return -1 ;
 			}
 
 		if (end_count > 1000)
 		{
 			printf("\nBarometer testing failed.\n");			
-			break;
+			return -1 ;
 		}			
 		
 

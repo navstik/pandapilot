@@ -112,3 +112,5 @@ else
 	#
 	echo "[init] startup done."
 fi
+
+pwm_input &

@@ -7,9 +7,9 @@
 #include <uORB/topics/sensor_combined.h>
 
 
-__EXPORT int test_gyrometer_main(int argc, char *argv[]);
+__EXPORT int test_gyrometer(int argc, char *argv[]);
  
-int test_gyrometer_main(int argc, char *argv[])
+int test_gyrometer(int argc, char *argv[])
 {	
 	float x=0,y=0,z=0;
 //	int flag_x=0,flag_y=0,flag_z=0,FLAG=0;
@@ -141,7 +141,7 @@ int test_gyrometer_main(int argc, char *argv[])
 		if (end_count > 10000)
 		{
 			printf("\nAGyrometer testing failed.\n");			
-			break;
+			return -1 ;
 		}
 			
 	end_count++ ;
@@ -150,5 +150,3 @@ int test_gyrometer_main(int argc, char *argv[])
  
 	return 0;
 }
-
-

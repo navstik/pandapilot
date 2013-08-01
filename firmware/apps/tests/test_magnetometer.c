@@ -9,11 +9,11 @@
 
 #define PI 3.14159265
 
-__EXPORT int test_magnetometer_main(int argc, char *argv[]);
+__EXPORT int test_magnetometer(int argc, char *argv[]);
 
 float my_atan2f(float y, float x)  ;
  
-int test_magnetometer_main(int argc, char *argv[])
+int test_magnetometer(int argc, char *argv[])
 {	
 	float acc_x=0,acc_y=0,acc_z=0,mag_x=0,mag_y=0,mag_z=0,result,degree;
 	float heading,initial_heading, angles[3], cosRoll, sinRoll, cosPitch, sinPitch ;
@@ -119,7 +119,7 @@ int test_magnetometer_main(int argc, char *argv[])
 		if (end_count > 1000)
 		{
 			printf("\nMagnetometer testing failed.\n");			
-			break;
+			return -1 ;
 		}
 			
 	end_count++ ;

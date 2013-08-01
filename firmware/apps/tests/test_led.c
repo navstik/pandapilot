@@ -33,9 +33,9 @@
 //#define  GREEN LED 	(GPIO_OUTPUT|GPIO_PULLUP|GPIO_PORTC|GPIO_PIN4)
 //#define  AMBER LED 	(GPIO_OUTPUT|GPIO_PULLUP|GPIO_PORTC|GPIO_PIN5)
 
-__EXPORT int  test_led_main(int argc, char *argv[]);
+__EXPORT int  test_led(int argc, char *argv[]);
 
-int test_led_main(int argc, char *argv[])
+int test_led(int argc, char *argv[])
 {
 	int i ;
 	
@@ -94,5 +94,6 @@ int test_led_main(int argc, char *argv[])
 
 printf ("\nLED Testing Complete.\n\n");
 
+return 0 ;
 }
 

@@ -295,10 +295,11 @@ rSR(0) = ~status;
   	//printf("Captured on RC1  %u\n", count1);
   	
   	/* if we missed an edge, we have to give up */
-	if (status & (GTIM_SR_CC1OF))
+/*	if (status & (GTIM_SR_CC1OF))
 	{ printf("\nmissed an edge on RC1");
 		return;
 	}	
+
 	/* how long since the last edge? */
 	rc1 = count1 - rc1_last;
 	rc1_last = count1;
@@ -319,10 +320,11 @@ rSR(1) = ~status;
   	//printf("Captured on RC3  %u\n", count1);
   	
   	/* if we missed an edge, we have to give up */
-	if (status & (GTIM_SR_CC1OF))
+/*	if (status & (GTIM_SR_CC1OF))
 	{ printf("\nmissed an edge on RC3");
 		return;
 	}	
+
 	/* how long since the last edge? */
 	rc3 = count1 - rc3_last;
 	rc3_last = count1;
@@ -339,10 +341,11 @@ rSR(1) = ~status;
   	//printf("Captured on RC4 %u\n", count1);
   	
   	/* if we missed an edge, we have to give up */
-	if (status & (GTIM_SR_CC2OF))
+/*	if (status & (GTIM_SR_CC2OF))
 	{ printf("\nmissed an edge on RC4");
 		return;
 	}	
+
 	/* how long since the last edge? */
 	rc4 = count1 - rc4_last;
 	rc4_last = count1;
@@ -363,10 +366,11 @@ rSR(2) = ~status;
 	uint16_t count1 = rCCR1(2);
   	//printf("Captured on RC2  %u\n", count1);
   	/* if we missed an edge, we have to give up */
-	if (status & (GTIM_SR_CC1OF))
+/*	if (status & (GTIM_SR_CC1OF))
 	{ printf("\nmissed an edge on RC2");
 		return;
 	}	
+
 	/* how long since the last edge? */
 	rc2 = count1 - rc2_last;
 	rc2_last = count1;
@@ -387,10 +391,11 @@ rSR(3) = ~status;
 	uint16_t count1 = rCCR1(3);
   	//printf("Captured on RC6  %u\n", count1);
   	/* if we missed an edge, we have to give up */
-	if (status & (ATIM_SR_CC1OF))
+/*	if (status & (ATIM_SR_CC1OF))
 	{ printf("\nmissed an edge on RC6");
 		return;
-	}	
+	}	*/
+
 	/* how long since the last edge? */
 	rc6 = count1 - rc6_last;
 	rc6_last = count1;
@@ -408,10 +413,11 @@ rSR(3) = ~status;
   	//printf("Captured on RC5  %u\n", count1);
   	
   	/* if we missed an edge, we have to give up */
-	if (status & (ATIM_SR_CC2OF))
+/*	if (status & (ATIM_SR_CC2OF))
 	{ printf("\nmissed an edge on RC5");
 		return;
 	}	
+
 	/* how long since the last edge? */
 	rc5 = count1 - rc5_last;
 	rc5_last = count1;
@@ -436,10 +442,3 @@ void enable_irq(void)
 	
 	return;		
 }
-/*
-static int input_pwm(uint32_t status,uint32_t count1)
-{
-  
-	
-	return;
-}*/

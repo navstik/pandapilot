@@ -86,17 +86,7 @@ CONFIGURED_APPS += pwm_input
 CONFIGURED_APPS += pwm_output
 
 # Test Apps
-CONFIGURED_APPS += test_accelerometer
-CONFIGURED_APPS += test_barometer
-CONFIGURED_APPS += test_battery
-CONFIGURED_APPS += test_gpio
-CONFIGURED_APPS += test_gyrometer
-CONFIGURED_APPS += test_led
-CONFIGURED_APPS += test_magnetometer
-CONFIGURED_APPS += test_navstik
-CONFIGURED_APPS += test_pwm
-CONFIGURED_APPS += test_pwren
-CONFIGURED_APPS += test_usb
+CONFIGURED_APPS += tests
 
 CONFIGURED_APPS += mavlink
 CONFIGURED_APPS += mavlink_onboard

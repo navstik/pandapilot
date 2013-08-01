@@ -29,16 +29,14 @@
 #include <stm32_tim.h>
 #include "test_input.h" 
 
-__EXPORT int  test_pwm_main(int argc, char *argv[]);
+__EXPORT int  test_pwm(int argc, char *argv[]);
 extern volatile uint16_t rc_buffer[6] ;
 
-int	test_pwm_main(int argc, char *argv[])
+int	test_pwm(int argc, char *argv[])
 {
 
 	uint16_t value[6] = {1000,1200,1500,1700,1800,2000};
-	int flag_input[6] = {0,0,0,0,0,0};
-	int flag_output[6] = {0,0,0,0,0,0};
-	int p=0,q=0,i,j ;
+	int p=0,q=0,i,j,error=0 ;
 
 	for (i=0;i<6;i++)
 		{
@@ -58,18 +56,18 @@ int	test_pwm_main(int argc, char *argv[])
 
         if (rc_buffer[i] > (value[i] - 5) && rc_buffer[i] < (value[i] + 5))
             {
-            flag_input[i] = 1 ;
-            flag_output[i] = 1 ;
   	    printf("\nPWM pair %d working correctly.\n",i+1) ;        
- //           correct_pair[p] = i ;
-   //         p++ ;
             }
             
         else
             {
             printf("\nPWM pair %d may not be functioning correctly\n",i+1) ;        
-     //       error_pair[q] = i ;
-       //     q++ ;
+	    error++ ;	
             }
         }
+
+	if (error != 0)
+		return -1 ;
+
+return 0 ;
 }

@@ -32,9 +32,9 @@
 #define  USB_HS_ID	(GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_2MHz|GPIO_OUTPUT_CLEAR|GPIO_PORTB|GPIO_PIN12)
 #define  USB_HS_VBUS 	(GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_2MHz|GPIO_OUTPUT_CLEAR|GPIO_PORTB|GPIO_PIN13)
 
-__EXPORT int  test_usb_main(int argc, char *argv[]);
+__EXPORT int  test_usb(int argc, char *argv[]);
 
-int test_usb_main(int argc, char *argv[])
+int test_usb(int argc, char *argv[])
 {
 	int flag = 0 ;
 	
@@ -44,22 +44,24 @@ int test_usb_main(int argc, char *argv[])
 	stm32_gpiowrite(USB_HS_ID,1);	
 	
 	if (stm32_gpioread(USB_HS_VBUS) == 0)
+		{
 		printf ("\nEither USB_HS_ID(Pin 1) or USB_HS_VBUS(Pin 4) is not working") ;
+		return -1 ;
+		}
 	else
 		{
 		stm32_gpiowrite(USB_HS_ID,0);
 		if (stm32_gpioread(USB_HS_VBUS) == 1)
+			{
 			printf ("\nEither USB_HS_ID(Pin 1) or USB_HS_VBUS(Pin 4) is not working") ;
+			return -1 ;
+			}
 		else
-			flag++ ;
+			return 0 ;
 		}
-
-	if (flag >= 1)
-		printf ("\nUSB Pins working fine.\n") ;
-
 
 printf ("\n\nUSB Testing Complete.\n\n");
 
-usleep(1000000) ;
+return 0 ;
 }
 

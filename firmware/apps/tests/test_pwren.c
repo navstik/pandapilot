@@ -38,9 +38,9 @@
 #define SENSOR_PWR_EN		(GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz|GPIO_OUTPUT_CLEAR|GPIO_PORTC|GPIO_PIN15)
 
 
-__EXPORT int  test_pwren_main(int argc, char *argv[]);
+__EXPORT int  test_pwren(int argc, char *argv[]);
 
-int test_pwren_main(int argc, char *argv[])
+int test_pwren(int argc, char *argv[])
 {
 	printf ("\nSensor power disabled. You should now see sensor data capture errors.\n\n");
 	usleep(3000000) ;	
@@ -92,17 +92,17 @@ if (poll(&fds, 1, 1000)>0)
     {
      n=read(fd,&c,1); // reading and printing the characters coming from GPS to ensure the connection with gps
      if (n<0)
-     printf("read failed");
+     	return -1 ;
  
      printf("%c ",c); // printing the characters on console
    }
 i++;
 }
 
-
 close(fd);
 
 printf ("\n\nGPS POWER ENABLE and SENSOR POWER ENABLE Testing Complete.\n\n");
 
+return 0 ;
 }
 	

@@ -9,8 +9,7 @@ HAL_BOARD ?= HAL_BOARD_NAVSTIK
 PORT = /dev/ttyACM0
 
 # NAVSTIK app build: uncomment and fill in the path to Navstik Firmware repository:
-NAVSTIK_ROOT = ~/navstik/pandapilot/firmware/
+NAVSTIK_ROOT = /home/tanmay/pandapilot_31july/pandapilot/firmware/
 
-APPDIR = ~/navstik/pandapilot/firmware/apps
-
+APPDIR = /home/tanmay/pandapilot_31july/pandapilot/firmware/apps
 #ARDUINO = /path/to/arduino-1.0.3
