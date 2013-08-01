@@ -20,6 +20,8 @@
 set MODE autostart
 set USB autoconnect
 
+gps_config start &
+
 #
 # Start playing the startup tune
 #
