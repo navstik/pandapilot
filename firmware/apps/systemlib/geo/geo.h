@@ -48,6 +48,16 @@
 
 #include <stdbool.h>
 
+#define CONSTANTS_ONE_G					9.80665f		/* m/s^2		*/
+#define CONSTANTS_AIR_DENSITY_SEA_LEVEL_15C		1.225f			/* kg/m^3		*/
+#define CONSTANTS_AIR_GAS_CONST				287.1f 			/* J/(kg * K)		*/
+#define CONSTANTS_ABSOLUTE_NULL_CELSIUS			-273.15f		/* °C			*/
+#define CONSTANTS_RADIUS_OF_EARTH			6371000			/* meters (m)		*/
+
+/* compatibility aliases */
+#define RADIUS_OF_EARTH		CONSTANTS_RADIUS_OF_EARTH
+#define GRAVITY_MSS		CONSTANTS_ONE_G
+
 struct crosstrack_error_s {
 	bool past_end;		// Flag indicating we are past the end of the line/arc segment
 	float distance;		// Distance in meters to closest point on line/arc

@@ -137,9 +137,9 @@ static GPS         *g_gps;
 // flight modes convenience array
 static AP_Int8          *flight_modes = &g.flight_mode1;
 
-#if CONFIG_ADC == ENABLED
-static AP_ADC_ADS7844 adc;
-#endif
+#if CONFIG_HAL_BOARD == HAL_BOARD_APM1
+AP_ADC_ADS7844 apm1_adc;
+#endif 
 
 #if CONFIG_BARO == AP_BARO_BMP085
 static AP_Baro_BMP085 barometer;
@@ -211,7 +211,7 @@ AP_InertialSensor_Navstik ins;
 #elif CONFIG_INS_TYPE == CONFIG_INS_STUB
 AP_InertialSensor_Stub ins;
 #elif CONFIG_INS_TYPE == CONFIG_INS_OILPAN
-AP_InertialSensor_Oilpan ins( &adc );
+AP_InertialSensor_Oilpan ins( &apm1_adc ); 
 #else
   #error Unrecognised CONFIG_INS_TYPE setting.
 #endif // CONFIG_INS_TYPE
@@ -239,8 +239,6 @@ GCS_MAVLINK gcs3;
 ////////////////////////////////////////////////////////////////////////////////
 // Analog Inputs
 ////////////////////////////////////////////////////////////////////////////////
-
-AP_HAL::AnalogSource *pitot_analog_source;
 
 // a pin for reading the receiver RSSI voltage. The scaling by 0.25 
 // is to take the 0 to 1024 range down to an 8 bit range for MAVLink
@@ -672,18 +670,11 @@ void setup() {
 
     rssi_analog_source = hal.analogin->channel(ANALOG_INPUT_NONE, 0.25);
 
-#if CONFIG_PITOT_SOURCE == PITOT_SOURCE_ADC
-    pitot_analog_source = new AP_ADC_AnalogSource( &adc,
-                                         CONFIG_PITOT_SOURCE_ADC_CHANNEL, 1.0);
-#elif CONFIG_PITOT_SOURCE == PITOT_SOURCE_ANALOG_PIN
-    pitot_analog_source = hal.analogin->channel(CONFIG_PITOT_SOURCE_ANALOG_PIN, CONFIG_PITOT_SCALING);
-#endif
     vcc_pin = hal.analogin->channel(ANALOG_INPUT_BOARD_VCC);
 
     batt_volt_pin = hal.analogin->channel(g.battery_volt_pin);
     batt_curr_pin = hal.analogin->channel(g.battery_curr_pin);
     
-    airspeed.init(pitot_analog_source);
     init_ardupilot();
 }
 

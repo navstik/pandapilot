@@ -1,12 +1,12 @@
 /// -*- tab-width: 4; Mode: C++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 /*
- *   Airspeed.pde - airspeed example sketch
- *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public License
- *   as published by the Free Software Foundation; either version 2.1
- *   of the License, or (at your option) any later version.
- */
+* Airspeed.pde - airspeed example sketch
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* as published by the Free Software Foundation; either version 2.1
+* of the License, or (at your option) any later version.
+*/
 
 #include <AP_Common.h>
 #include <AP_Progmem.h>
@@ -14,10 +14,15 @@
 #include <AP_Math.h>
 #include <AP_HAL.h>
 #include <AP_HAL_AVR.h>
-
+#include <AP_ADC.h>
+#include <AP_ADC_AnalogSource.h>
 #include <Filter.h>
 #include <AP_Buffer.h>
 #include <AP_Airspeed.h>
+
+#if CONFIG_HAL_BOARD == HAL_BOARD_APM1
+AP_ADC_ADS7844 apm1_adc;
+#endif
 
 const AP_HAL::HAL& hal = AP_HAL_BOARD_DRIVER;
 
@@ -27,7 +32,7 @@ void setup()
 {
     hal.console->println("ArduPilot Airspeed library test");
 
-    airspeed.init(hal.analogin->channel(0));
+    airspeed.init();
     airspeed.calibrate();
 }
 

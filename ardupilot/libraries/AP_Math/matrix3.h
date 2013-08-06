@@ -1,17 +1,17 @@
-// -*- tab-width: 4; Mode: C++; c-basic-offset: 4; indent-tabs-mode: t -*-
+// -*- tab-width: 4; Mode: C++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
 // Copyright 2010 Michael Smith, all rights reserved.
 
-//	This library is free software; you can redistribute it and / or
-//	modify it under the terms of the GNU Lesser General Public
-//	License as published by the Free Software Foundation; either
-//	version 2.1 of the License, or (at your option) any later version.
+// This library is free software; you can redistribute it and / or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
 
 // Inspired by:
 /****************************************
- * 3D Vector Classes
- * By Bill Perone (billperone@yahoo.com)
- */
+* 3D Vector Classes
+* By Bill Perone (billperone@yahoo.com)
+*/
 
 //
 // 3x3 matrix implementation.
@@ -21,11 +21,11 @@
 //
 // In addition to the template, this header defines the following types:
 //
-// Matrix3i		3x3 matrix of signed integers
-// Matrix3ui	3x3 matrix of unsigned integers
-// Matrix3l		3x3 matrix of signed longs
-// Matrix3ul	3x3 matrix of unsigned longs
-// Matrix3f		3x3 matrix of signed floats
+// Matrix3i 3x3 matrix of signed integers
+// Matrix3ui 3x3 matrix of unsigned integers
+// Matrix3l 3x3 matrix of signed longs
+// Matrix3ul 3x3 matrix of unsigned longs
+// Matrix3f 3x3 matrix of signed floats
 //
 
 #ifndef MATRIX3_H
@@ -39,7 +39,7 @@ class Matrix3 {
 public:
 
     // Vectors comprising the rows of the matrix
-    Vector3<T>        a, b, c;
+    Vector3<T> a, b, c;
 
     // trivial ctor
     // note that the Vector3 ctor will zero the vector elements
@@ -55,87 +55,90 @@ public:
     }
 
     // function call operator
-    void operator        () (const Vector3<T> a0, const Vector3<T> b0, const Vector3<T> c0)
+    void operator () (const Vector3<T> a0, const Vector3<T> b0, const Vector3<T> c0)
     {
         a = a0; b = b0; c = c0;
     }
 
     // test for equality
-    bool operator        == (const Matrix3<T> &m)
+    bool operator == (const Matrix3<T> &m)
     {
         return (a==m.a && b==m.b && c==m.c);
     }
 
     // test for inequality
-    bool operator        != (const Matrix3<T> &m)
+    bool operator != (const Matrix3<T> &m)
     {
         return (a!=m.a || b!=m.b || c!=m.c);
     }
 
     // negation
-    Matrix3<T> operator        - (void) const
+    Matrix3<T> operator - (void) const
     {
         return Matrix3<T>(-a,-b,-c);
     }
 
     // addition
-    Matrix3<T> operator        + (const Matrix3<T> &m) const
+    Matrix3<T> operator + (const Matrix3<T> &m) const
     {
         return Matrix3<T>(a+m.a, b+m.b, c+m.c);
     }
-    Matrix3<T> &operator        += (const Matrix3<T> &m)
+    Matrix3<T> &operator += (const Matrix3<T> &m)
     {
         return *this = *this + m;
     }
 
     // subtraction
-    Matrix3<T> operator        - (const Matrix3<T> &m) const
+    Matrix3<T> operator - (const Matrix3<T> &m) const
     {
         return Matrix3<T>(a-m.a, b-m.b, c-m.c);
     }
-    Matrix3<T> &operator        -= (const Matrix3<T> &m)
+    Matrix3<T> &operator -= (const Matrix3<T> &m)
     {
         return *this = *this - m;
     }
 
     // uniform scaling
-    Matrix3<T> operator        * (const T num) const
+    Matrix3<T> operator * (const T num) const
     {
         return Matrix3<T>(a*num, b*num, c*num);
     }
-    Matrix3<T> &operator        *= (const T num)
+    Matrix3<T> &operator *= (const T num)
     {
         return *this = *this * num;
     }
-    Matrix3<T> operator        / (const T num) const
+    Matrix3<T> operator / (const T num) const
     {
         return Matrix3<T>(a/num, b/num, c/num);
     }
-    Matrix3<T> &operator        /= (const T num)
+    Matrix3<T> &operator /= (const T num)
     {
         return *this = *this / num;
     }
 
     // multiplication by a vector
-    Vector3<T> operator         *(const Vector3<T> &v) const;
+    Vector3<T> operator *(const Vector3<T> &v) const;
 
     // multiplication of transpose by a vector
-    Vector3<T>                  mul_transpose(const Vector3<T> &v) const;
+    Vector3<T> mul_transpose(const Vector3<T> &v) const;
+
+    // multiplication by a vector giving a Vector2 result (XY components)
+    Vector2<T> mulXY(const Vector3<T> &v) const;
 
     // extract x column
-    Vector3<T>                  colx(void) const
+    Vector3<T> colx(void) const
     {
         return Vector3f(a.x, b.x, c.x);
     }
 
     // extract y column
-    Vector3<T>        coly(void) const
+    Vector3<T> coly(void) const
     {
         return Vector3f(a.y, b.y, c.y);
     }
 
     // extract z column
-    Vector3<T>        colz(void) const
+    Vector3<T> colz(void) const
     {
         return Vector3f(a.z, b.z, c.z);
     }
@@ -143,24 +146,24 @@ public:
     // multiplication by another Matrix3<T>
     Matrix3<T> operator *(const Matrix3<T> &m) const;
 
-    Matrix3<T> &operator        *=(const Matrix3<T> &m)
+    Matrix3<T> &operator *=(const Matrix3<T> &m)
     {
         return *this = *this * m;
     }
 
     // transpose the matrix
-    Matrix3<T>          transposed(void) const;
+    Matrix3<T> transposed(void) const;
 
-    Matrix3<T>          transpose(void)
+    Matrix3<T> transpose(void)
     {
         return *this = transposed();
     }
 
     // zero the matrix
-    void        zero(void);
+    void zero(void);
 
     // setup the identity matrix
-    void        identity(void) {
+    void identity(void) {
         a.x = b.y = c.z = 1;
         a.y = a.z = 0;
         b.x = b.z = 0;
@@ -168,29 +171,33 @@ public:
     }
 
     // check if any elements are NAN
-    bool        is_nan(void)
+    bool is_nan(void)
     {
         return a.is_nan() || b.is_nan() || c.is_nan();
     }
 
     // fill in the matrix with a standard rotation
-    void        rotation(enum Rotation rotation);
+    void rotation(enum Rotation rotation);
 
     // create a rotation matrix from Euler angles
-    void        from_euler(float roll, float pitch, float yaw);
+    void from_euler(float roll, float pitch, float yaw);
 
     // create eulers from a rotation matrix
-    void        to_euler(float *roll, float *pitch, float *yaw);
+    void to_euler(float *roll, float *pitch, float *yaw);
 
     // apply an additional rotation from a body frame gyro vector
     // to a rotation matrix.
-    void        rotate(const Vector3<T> &g);
+    void rotate(const Vector3<T> &g);
+
+    // apply an additional rotation from a body frame gyro vector
+    // to a rotation matrix but only use X, Y elements from gyro vector
+    void rotateXY(const Vector3<T> &g);
 };
 
-typedef Matrix3<int16_t>                Matrix3i;
-typedef Matrix3<uint16_t>               Matrix3ui;
-typedef Matrix3<int32_t>                Matrix3l;
-typedef Matrix3<uint32_t>               Matrix3ul;
-typedef Matrix3<float>                  Matrix3f;
+typedef Matrix3<int16_t> Matrix3i;
+typedef Matrix3<uint16_t> Matrix3ui;
+typedef Matrix3<int32_t> Matrix3l;
+typedef Matrix3<uint32_t> Matrix3ul;
+typedef Matrix3<float> Matrix3f;
 
 #endif // MATRIX3_H

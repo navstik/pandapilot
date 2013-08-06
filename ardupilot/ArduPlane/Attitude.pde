@@ -10,6 +10,7 @@
   PIDs to change the scaling of the PID with speed. At high speed we
   move the surfaces less, and at low speeds we move them more.
  */
+
 static float get_speed_scaler(void)
 {
     float aspeed, speed_scaler;

@@ -37,6 +37,7 @@ then
 	bmp180 start
 	hmc5883 start
 	adc start
+	meas_airspeed start
 
 	fmu start mode_pwm
 #	if [ $device == /dev/ttyS1 ]

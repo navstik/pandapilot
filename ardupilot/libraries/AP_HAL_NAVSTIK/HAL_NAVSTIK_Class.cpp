@@ -111,8 +111,8 @@ static int main_loop(int argc, char **argv)
 
 
     hal.uartA->begin(115200);
-    hal.uartB->begin(9600);
-    hal.uartC->begin(115200);
+    hal.uartB->begin(38400);
+    hal.uartC->begin(57600);
     hal.console->init((void*) hal.uartA);
     hal.scheduler->init(NULL);
     hal.rcin->init(NULL);

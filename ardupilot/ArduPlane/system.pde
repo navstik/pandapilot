@@ -155,10 +155,11 @@ static void init_ardupilot()
 
 #if HIL_MODE != HIL_MODE_ATTITUDE
 
- #if CONFIG_ADC == ENABLED
-    adc.Init();      // APM ADC library initialization
+   #if CONFIG_HAL_BOARD == HAL_BOARD_APM1
+      apm1_adc.Init();      // APM ADC library initialization 
  #endif
-
+    
+    airspeed.init();  
     barometer.init();
 
     if (g.compass_enabled==true) {

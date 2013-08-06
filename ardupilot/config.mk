@@ -12,4 +12,5 @@ PORT = /dev/ttyACM0
 NAVSTIK_ROOT = /home/tanmay/pandapilot_31july/pandapilot/firmware/
 
 APPDIR = /home/tanmay/pandapilot_31july/pandapilot/firmware/apps
+
 #ARDUINO = /path/to/arduino-1.0.3

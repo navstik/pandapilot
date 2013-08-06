@@ -85,9 +85,12 @@ CONFIGURED_APPS += uORB
 CONFIGURED_APPS += pwm_input
 CONFIGURED_APPS += pwm_output
 CONFIGURED_APPS += gps_config
+CONFIGURED_APPS += meas_airspeed
+CONFIGURED_APPS += airspeed_test
 
 # Test Apps
 CONFIGURED_APPS += tests
+CONFIGURED_APPS += print_rc_buffer
 
 CONFIGURED_APPS += mavlink
 CONFIGURED_APPS += mavlink_onboard

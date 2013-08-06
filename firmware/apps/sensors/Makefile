@@ -40,6 +40,7 @@ PRIORITY	= SCHED_PRIORITY_MAX-5
 STACKSIZE	= 4096
 
 CXXSRCS		= sensors.cpp
-CSRCS		= sensor_params.c
+CSRCS		= sensor_params.c \
+		  airspeed.c
 
 include $(APPDIR)/mk/app.mk

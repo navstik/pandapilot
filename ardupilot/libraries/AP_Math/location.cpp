@@ -26,7 +26,7 @@
 // radius of earth in meters
 #define RADIUS_OF_EARTH 6378100
 
-static float longitude_scale(const struct Location *loc)
+extern float longitude_scale(const struct Location *loc)
 {
     static int32_t last_lat;
     static float scale = 1.0;
@@ -58,7 +58,7 @@ float get_distance(const struct Location *loc1, const struct Location *loc2)
 
 // return distance in centimeters to between two locations, or -1 if
 // one of the locations is invalid
-int32_t get_distance_cm(const struct Location *loc1, const struct Location *loc2)
+uint32_t get_distance_cm(const struct Location *loc1, const struct Location *loc2)
 {
     return get_distance(loc1, loc2) * 100;
 }
